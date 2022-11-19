@@ -35,7 +35,7 @@ jobs:
       - name: Build Pragma
         shell: pwsh
         run: |
-          $vcvarsScript="C:/Program Files (x86)/Microsoft Visual Studio/2022/Enterprise/Common7/Tools/VsDevCmd.bat"
+          $vcvarsScript="`"C:/Program Files (x86)/Microsoft Visual Studio/2022/Enterprise/Common7/Tools/VsDevCmd.bat`""
 
           cmd /c "$vcvarsScript&set" |
           foreach {
