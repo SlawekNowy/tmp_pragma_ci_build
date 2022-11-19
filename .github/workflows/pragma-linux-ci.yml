@@ -71,7 +71,7 @@ jobs:
       - name: Build Pragma
         shell: bash
         run: |
-          cd pragma
+          cd pragma/build
           cmake --build "." --config RelWithDebInfo --target pragma-install-full
           
       - name: Handle Error

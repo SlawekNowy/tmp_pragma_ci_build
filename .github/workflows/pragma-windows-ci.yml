@@ -35,10 +35,11 @@ jobs:
       - name: Build Pragma
         shell: pwsh
         run: |
-          $vcvarsScript="C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/Tools/VsDevCmd.bat"
+          $vcvarsScript="C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/Tools/VsDevCmd.bat -host_arch=amd64 -arch=amd64"
 
           $vcvarsScriptPath=Split-Path $vcvarsScript -Parent
           $vcvarsScriptFile=Split-Path $vcvarsScript -leaf
+          # See https://stackoverflow.com/a/2124759/1879228
           pushd "$vcvarsScriptPath"
           cmd /c "$vcvarsScriptFile&set" |
           foreach {
