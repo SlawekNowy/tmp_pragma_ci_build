@@ -60,13 +60,19 @@ jobs:
           # TODO: Install CMake
           # TODO: Install Vulkan SDK
 
-      - name: Build Pragma
+      - name: Setup Pragma
         shell: bash
         run: |
           git clone https://github.com/Silverlan/pragma.git --recurse-submodules
           cp linux/pragma_build_linux.sh pragma/build_scripts/build_linux.sh
           cd pragma
           bash ./build_scripts/build_linux.sh
+
+      - name: Build Pragma
+        shell: bash
+        run: |
+          cd pragma
+          cmake --build "." --config RelWithDebInfo --target pragma-install-full
           
       - name: Handle Error
         uses: Silverlan/common_actions/action_handle_error@main
