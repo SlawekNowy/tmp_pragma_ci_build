@@ -36,7 +36,7 @@ jobs:
         shell: pwsh
         run: |
           #-confirm:$true
-          Install-Module Pscx -Scope CurrentUser -force:$true
+          Install-Module Pscx -Scope CurrentUser -force:$true -AllowClobber
           $vcvarsScript="C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
           Invoke-BatchFile "$vcvarsScript"
           git clone https://github.com/Silverlan/pragma.git --recurse-submodules
