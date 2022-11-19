@@ -49,7 +49,6 @@ jobs:
           popd
           Write-Host "`nVisual Studio 2022 Command Prompt variables set." -ForegroundColor Yellow
 
-          Invoke-BatchFile "$vcvarsScript"
           git clone https://github.com/Silverlan/pragma.git --recurse-submodules
           cp build_windows_2.ps1 pragma/build_scripts/
           cd pragma
