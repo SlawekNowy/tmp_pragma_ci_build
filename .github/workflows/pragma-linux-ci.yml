@@ -31,6 +31,35 @@ jobs:
         with:
           submodules: true
 
+      - name: Install Prerequisites
+        shell: bash
+        run: |
+          sudo apt install build-essential
+          sudo add-apt-repository ppa:savoury1/llvm-defaults-14
+          sudo apt update
+          sudo apt install clang-14
+          sudo apt install libstdc++-12-dev
+          sudo apt install libstdc++6
+
+          # GLFW
+          sudo apt install xorg-dev
+
+          # OIDN
+          sudo apt install git-lfs
+
+          # Cycles
+          sudo apt-get install subversion
+
+          # Curl
+          sudo apt-get install libssl-dev
+          sudo apt install libssh2-1
+
+          # OIIO
+          sudo apt-get install python3-distutils
+
+          # TODO: Install CMake
+          # TODO: Install Vulkan SDK
+
       - name: Build Pragma
         shell: bash
         run: |
