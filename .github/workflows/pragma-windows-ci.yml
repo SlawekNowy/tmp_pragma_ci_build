@@ -35,6 +35,7 @@ jobs:
       - name: Build Pragma
         shell: pwsh
         run: |
+          Install-Module Pscx -Scope CurrentUser
           $vcvarsScript="C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
           Invoke-BatchFile "$vcvarsScript"
           git clone https://github.com/Silverlan/pragma.git --recurse-submodules
