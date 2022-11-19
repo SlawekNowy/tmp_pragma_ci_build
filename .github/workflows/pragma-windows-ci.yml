@@ -1,0 +1,41 @@
+name: Build Windows
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build - ${{ matrix.config.os }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - os: windows-latest
+            name: "Windows x64 MSVC"
+            artifact: "Windows-MSVC.tar.xz"
+            build_type: "RelWithDebInfo"
+            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+            cc: "cl"
+            cxx: "cl"
+            archiver: "7z a"
+            generators: "Visual Studio 16 2019"
+            build_dir: 'build'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Build Pragma
+        shell: pwsh
+        run: |
+          git clone https://github.com/Silverlan/pragma.git
+          cd pragma
+          & ./build_scripts/build_windows.ps1 -toolset "msvc-14.2" -generator "Visual Studio 17 2022" -vcvars "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+          
+      - name: Handle Error
+        uses: Silverlan/common_actions/action_handle_error@main
+        if: failure()
+        
