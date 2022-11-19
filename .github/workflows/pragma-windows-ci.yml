@@ -31,7 +31,7 @@ jobs:
       - name: Build Pragma
         shell: pwsh
         run: |
-          git clone https://github.com/Silverlan/pragma.git
+          git clone https://github.com/Silverlan/pragma.git --recurse-submodules
           cp build_windows_2.ps1 pragma/build_scripts/
           cd pragma
           & ./build_scripts/build_windows_2.ps1 -toolset "msvc-14.2" -generator "Visual Studio 17 2022" -vcvars "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
