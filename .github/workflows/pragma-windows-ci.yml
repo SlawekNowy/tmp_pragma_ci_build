@@ -5,6 +5,10 @@ on:
   pull_request:
     branches: [ main ]
 
+concurrency:
+  group: environment-win-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build - ${{ matrix.config.os }}
