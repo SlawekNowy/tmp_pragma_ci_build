@@ -21,7 +21,7 @@ jobs:
             name: "Windows x64 MSVC"
             artifact: "Windows-MSVC.tar.xz"
             build_type: "RelWithDebInfo"
-            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/VsDevCmd.bat"
+            environment_script: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/VsDevCmd.bat"
             cc: "cl"
             cxx: "cl"
             archiver: "7z a"
@@ -35,7 +35,7 @@ jobs:
       - name: Build Pragma
         shell: pwsh
         run: |
-          $vcvarsScript="C:/Program Files (x86)/Microsoft Visual Studio/2022/Enterprise/Common7/Tools/VsDevCmd.bat"
+          $vcvarsScript="C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/Tools/VsDevCmd.bat"
 
           $vcvarsScriptPath=Split-Path $vcvarsScript -Parent
           $vcvarsScriptFile=Split-Path $vcvarsScript -leaf
