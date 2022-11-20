@@ -78,6 +78,7 @@ jobs:
           
       - uses: mxschmitt/action-tmate@v3.13
         name: CI
+        if: success() || failure()
 
       #- name: Handle Error
       #  uses: Silverlan/common_actions/action_handle_error@main
