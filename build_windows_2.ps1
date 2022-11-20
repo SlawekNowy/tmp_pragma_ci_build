@@ -109,6 +109,7 @@ cmake .. -G $generator
 validate_result
 cmake --build "." --config "$buildConfig"
 validate_result
+cp zconf.h ../
 cd ../..
 print_hmsg "Done!"
 

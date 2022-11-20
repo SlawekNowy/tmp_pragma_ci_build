@@ -153,6 +153,7 @@ fi
 cd build
 cmake .. -G "$generator"
 cmake --build "." --config "$buildConfig"
+cp zconf.h ../
 cd ../..
 echo "Done!"
 
