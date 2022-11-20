@@ -87,7 +87,7 @@ jobs:
         shell: bash
         run: |
           mkdir release
-          rsync pragma/install/ release/
+          rsync pragma/build/install/ release/
           
       - name: Release Binaries
         uses: Silverlan/common_actions/release_nightly_binaries@main
