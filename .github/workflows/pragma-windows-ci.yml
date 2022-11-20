@@ -32,6 +32,17 @@ jobs:
         with:
           submodules: true
 
+      - name: Download Pragma
+        shell: pwsh
+        run: |
+          git clone https://github.com/Silverlan/pragma.git --recurse-submodules
+          cp build_windows_2.ps1 pragma/build_scripts/
+
+      - name: Preprocessing
+        shell: bash
+        run: |
+          cp CMakeLists.txt pragma/
+          
       - name: Build Pragma
         shell: pwsh
         run: |
@@ -50,8 +61,6 @@ jobs:
           popd
           Write-Host "`nVisual Studio 2022 Command Prompt variables set." -ForegroundColor Yellow
 
-          git clone https://github.com/Silverlan/pragma.git --recurse-submodules
-          cp build_windows_2.ps1 pragma/build_scripts/
           cd pragma
           & ./build_scripts/build_windows_2.ps1 -toolset "msvc-14.2" -generator "Visual Studio 17 2022" -vcvars "$vcvarsScript"
           

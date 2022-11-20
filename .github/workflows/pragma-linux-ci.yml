@@ -60,11 +60,20 @@ jobs:
           # TODO: Install CMake
           # TODO: Install Vulkan SDK
 
-      - name: Setup Pragma
+      - name: Download Pragma
         shell: bash
         run: |
           git clone https://github.com/Silverlan/pragma.git --recurse-submodules
           cp linux/pragma_build_linux.sh pragma/build_scripts/build_linux.sh
+
+      - name: Preprocessing
+        shell: bash
+        run: |
+          cp CMakeLists.txt pragma/
+
+      - name: Setup Pragma
+        shell: bash
+        run: |
           cd pragma
           bash ./build_scripts/build_linux.sh
 
