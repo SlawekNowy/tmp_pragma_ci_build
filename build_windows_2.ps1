@@ -109,8 +109,6 @@ cmake .. -G $generator
 validate_result
 cmake --build "." --config "$buildConfig"
 validate_result
-cp zconf.h ..
-cp zconf.h "$root/third_party_libs/zlib/"
 cd ../..
 print_hmsg "Done!"
 

@@ -153,8 +153,6 @@ fi
 cd build
 cmake .. -G "$generator"
 cmake --build "." --config "$buildConfig"
-cp zconf.h ..
-cp zconf.h "$root/third_party_libs/zlib/"
 cd ../..
 echo "Done!"
 
