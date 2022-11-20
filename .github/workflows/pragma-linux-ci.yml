@@ -107,7 +107,7 @@ jobs:
       - name: Generate Release Archive
         shell: bash
         working-directory: './release'
-        id: generate-archive
+        id: generate-archive2
         run: |
           mv $archiveName ../$archiveName
           echo "::set-output name=archive-name::$archiveName"
