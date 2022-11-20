@@ -89,11 +89,59 @@ jobs:
           mkdir release
           rsync pragma/build/install/ release/
           
-      - name: Release Binaries
-        uses: Silverlan/common_actions/release_nightly_binaries@main
+
+
+
+      - name: Tar
+        shell: bash
+        working-directory: './release'
+        id: generate-archive
+        run: |
+          archiveName=binaries_linux64.tar.gz
+          echo "Running command"
+          echo "tar -czvf $archiveName *"
+          echo "in $PWD"
+          tar -czvf $archiveName *
+          echo "DONE"
+
+      - name: Generate Release Archive
+        shell: bash
+        working-directory: './release'
+        id: generate-archive
+        run: |
+          mv $archiveName ../$archiveName
+          echo "::set-output name=archive-name::$archiveName"
+          
+      - name: Update Nightly Tag
+        uses: rickstaa/action-create-tag@v1.3.9
+        continue-on-error: true
+        if: runner.os == 'Linux' && ${{ '1' == '1' }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: "latest"
+          force_push_tag: true
+
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "${{inputs.working-directory}}/../${{ steps.generate-archive.outputs.archive-name }}"
+          body: "Automatically generated binaries."
           commit: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: latest
+          replacesArtifacts: true
+          allowUpdates: true
+
+
+
+
+
+
+
+      #- name: Release Binaries
+      #  uses: Silverlan/common_actions/release_nightly_binaries@main
+      #  with:
+      #    token: ${{ secrets.GITHUB_TOKEN }}
+      #    commit: ${{ github.ref_name }}
           
       - name: Handle Error
         uses: Silverlan/common_actions/action_handle_error@main
