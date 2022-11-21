@@ -11,6 +11,7 @@ param (
     [switch]$build = $true,
     [string]$build_directory = "build",
     [string]$deps_directory = "deps",
+    [string]$install_directory = "install",
     [switch]$help = $false,
     [string[]]$modules = @()
 )
@@ -58,6 +59,9 @@ Function display_help() {
     Write-Host "   -deps_directory                   Directory to write the dependency files to. Default: " -NoNewline
     Write-Host "deps"
 
+    Write-Host "   -install_directory                Directory to write the install files to (relative to the build directory). Default: " -NoNewline
+    Write-Host "install"
+
     Write-Host "   -help                             Display this help"
     Write-Host "   -modules                          Custom modules to install. Usage example: " -NoNewLine
     Write-Host "-modules pr_prosper_vulkan:`"https://github.com/Silverlan/pr_prosper_vulkan.git`",pr_bullet:`"https://github.com/Silverlan/pr_bullet.git`"" -ForegroundColor Gray
@@ -81,6 +85,7 @@ $buildConfig="RelWithDebInfo"
 $root="$PWD"
 $buildDir="$build_directory"
 $depsDir="$deps_directory"
+$installDir="$install_directory"
 
 if(![System.IO.Path]::IsPathRooted("$buildDir")){
     $buildDir="$PWD/$buildDir"
@@ -88,9 +93,13 @@ if(![System.IO.Path]::IsPathRooted("$buildDir")){
 if(![System.IO.Path]::IsPathRooted("$depsDir")){
     $depsDir="$PWD/$depsDir"
 }
+if(![System.IO.Path]::IsPathRooted("$installDir")){
+    $installDir="$buildDir/$installDir"
+}
 
 [System.IO.Directory]::CreateDirectory("$buildDir")
 [System.IO.Directory]::CreateDirectory("$depsDir")
+[System.IO.Directory]::CreateDirectory("$installDir")
 
 Function print_hmsg($msg)
 {
@@ -99,6 +108,7 @@ Function print_hmsg($msg)
 
 print_hmsg "Set build dir to `"$buildDir`"."
 print_hmsg "Set deps dir to `"$depsDir`"."
+print_hmsg "Set install dir to `"$installDir`"."
 
 Function validate_result()
 {
@@ -265,7 +275,6 @@ print_hmsg "Done!"
 print_hmsg "Configuring Pragma..."
 $rootDir=$PWD
 cd $buildDir
-$installDir="$PWD/install"
 print_hmsg "Additional CMake args: $cmakeArgs"
 
 $cmdCmake="cmake .. -G `"$generator`" ```
