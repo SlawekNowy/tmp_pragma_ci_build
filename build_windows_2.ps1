@@ -16,6 +16,23 @@ param (
     [string[]]$modules = @()
 )
 
+echo "Inputs:"
+echo "toolset: $toolset"
+echo "generator: $generator"
+echo "vcvars: $vcvars"
+echo "with_essential_client_modules: $with_essential_client_modules"
+echo "with_common_modules: $with_common_modules"
+echo "with_pfm: $with_pfm"
+echo "with_core_pfm_modules: $with_core_pfm_modules"
+echo "with_all_pfm_modules: $with_all_pfm_modules"
+echo "with_vr: $with_vr"
+echo "build: $build"
+echo "build_directory: $build_directory"
+echo "deps_directory: $deps_directory"
+echo "install_directory: $install_directory"
+$strModules=[string]$modules
+echo "modules: $strModules"
+
 $ErrorActionPreference="Stop"
 
 Function display_help() {
