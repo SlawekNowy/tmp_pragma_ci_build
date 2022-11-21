@@ -59,7 +59,7 @@ Function display_help() {
     Write-Host "   -deps_directory                   Directory to write the dependency files to. Can be relative or absolute. Default: " -NoNewline
     Write-Host "deps"
 
-    Write-Host "   -install_directory                Directory to write the build files to. Can be relative (to build directory) or absolute. Default: " -NoNewline
+    Write-Host "   -install_directory                Installation directory. Can be relative (to build directory) or absolute. Default: " -NoNewline
     Write-Host "install"
 
     Write-Host "   -help                             Display this help"
