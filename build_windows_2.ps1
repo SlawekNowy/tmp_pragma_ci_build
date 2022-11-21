@@ -143,8 +143,10 @@ cd boost_1_78_0
 print_hmsg "Building boost..."
 cmd.exe /c "$PWD/bootstrap.bat"
 validate_result
+echo "Running: ./b2 toolset=$toolset address-model=64 stage variant=release link=shared runtime-link=shared -j3"
 ./b2 toolset=$toolset address-model=64 stage variant=release link=shared runtime-link=shared -j3
 validate_result
+echo "Running: ./b2 toolset=$toolset address-model=64 stage variant=release link=static runtime-link=shared -j3"
 ./b2 toolset=$toolset address-model=64 stage variant=release link=static runtime-link=shared -j3
 validate_result
 print_hmsg "Done!"
@@ -153,8 +155,10 @@ $ZLIB_SOURCE="$PWD/../zlib-1.2.8"
 $ZLIB_INCLUDE="$PWD/../zlib-1.2.8"
 $ZLIB_LIBPATH="$PWD/../zlib-1.2.8/build/$buildConfig"
 print_hmsg "Building boost zlib libraries..."
+echo "Running: ./b2 toolset=`"$toolset`" address-model=64 stage variant=release link=shared runtime-link=shared --with-iostreams -sZLIB_SOURCE=`"$ZLIB_SOURCE`" -sZLIB_INCLUDE=`"$ZLIB_INCLUDE`" -sZLIB_LIBPATH=`"$ZLIB_LIBPATH`""
 ./b2 toolset="$toolset" address-model=64 stage variant=release link=shared runtime-link=shared --with-iostreams -sZLIB_SOURCE="$ZLIB_SOURCE" -sZLIB_INCLUDE="$ZLIB_INCLUDE" -sZLIB_LIBPATH="$ZLIB_LIBPATH"
 validate_result
+echo "Running: ./b2 toolset=`"$toolset`" address-model=64 stage variant=release link=static runtime-link=shared --with-iostreams -sZLIB_SOURCE=`"$ZLIB_SOURCE`" -sZLIB_INCLUDE=`"$ZLIB_INCLUDE`" -sZLIB_LIBPATH=`"$ZLIB_LIBPATH`""
 ./b2 toolset="$toolset" address-model=64 stage variant=release link=static runtime-link=shared --with-iostreams -sZLIB_SOURCE="$ZLIB_SOURCE" -sZLIB_INCLUDE="$ZLIB_INCLUDE" -sZLIB_LIBPATH="$ZLIB_LIBPATH"
 validate_result
 cd ../
