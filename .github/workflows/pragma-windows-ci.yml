@@ -49,21 +49,6 @@ jobs:
       - name: Build Pragma
         shell: pwsh
         run: |
-          $vcvarsScript="C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/Tools/VsDevCmd.bat -host_arch=amd64 -arch=amd64"
-
-          $vcvarsScriptPath=Split-Path $vcvarsScript -Parent
-          $vcvarsScriptFile=Split-Path $vcvarsScript -leaf
-          # See https://stackoverflow.com/a/2124759/1879228
-          pushd "$vcvarsScriptPath"
-          cmd /c "$vcvarsScriptFile&set" |
-          foreach {
-            if ($_ -match "=") {
-              $v = $_.split("=", 2); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])" 
-            }
-          }
-          popd
-          Write-Host "`nVisual Studio 2022 Command Prompt variables set." -ForegroundColor Yellow
-
           cd pragma
           & ./build_scripts/build_windows_2.ps1 -toolset "msvc-14.2" -generator "Visual Studio 17 2022" -vcvars "$vcvarsScript"
           
