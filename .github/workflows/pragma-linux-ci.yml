@@ -101,6 +101,11 @@ jobs:
           echo "Running command"
           echo "tar -czvf $archiveName *"
           echo "in $PWD"
+          echo "Files in parent dir:"
+          cd ..
+          ls -R
+          cd release
+          echo "-----"
           tar -czvf $archiveName *
           echo "DONE"
 
