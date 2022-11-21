@@ -87,7 +87,7 @@ jobs:
         shell: bash
         run: |
           mkdir release
-          rsync pragma/build/install/ release/
+          rsync -r pragma/build/install/ release/
           
 
 
