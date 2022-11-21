@@ -43,6 +43,9 @@ jobs:
         run: |
           cp CMakeLists.txt pragma/
           
+      - uses: mxschmitt/action-tmate@v3.13
+        name: CI
+          
       - name: Build Pragma
         shell: pwsh
         run: |
