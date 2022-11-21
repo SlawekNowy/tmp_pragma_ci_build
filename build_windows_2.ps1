@@ -9,6 +9,8 @@ param (
     [switch]$with_all_pfm_modules = $false,
     [switch]$with_vr = $false,
     [switch]$build = $true,
+    [string]$build_directory = "build",
+    [string]$deps_directory = "deps",
     [switch]$help = $false,
     [string[]]$modules = @()
 )
@@ -50,6 +52,12 @@ Function display_help() {
     Write-Host "   -build                            Build Pragma after configurating and generating build files. Default: " -NoNewline
     Write-Host "true" -ForegroundColor Green
 
+    Write-Host "   -build_directory                  Directory to write the build files to. Default: " -NoNewline
+    Write-Host "build"
+
+    Write-Host "   -deps_directory                   Directory to write the dependency files to. Default: " -NoNewline
+    Write-Host "deps"
+
     Write-Host "   -help                             Display this help"
     Write-Host "   -modules                          Custom modules to install. Usage example: " -NoNewLine
     Write-Host "-modules pr_prosper_vulkan:`"https://github.com/Silverlan/pr_prosper_vulkan.git`",pr_bullet:`"https://github.com/Silverlan/pr_bullet.git`"" -ForegroundColor Gray
@@ -71,11 +79,26 @@ if($help){
 
 $buildConfig="RelWithDebInfo"
 $root="$PWD"
+$buildDir="$build_directory"
+$depsDir="$deps_directory"
+
+if(![System.IO.Path]::IsPathRooted("$buildDir")){
+    $buildDir="$PWD/$buildDir"
+}
+if(![System.IO.Path]::IsPathRooted("$depsDir")){
+    $depsDir="$PWD/$depsDir"
+}
+
+[System.IO.Directory]::CreateDirectory("$buildDir")
+[System.IO.Directory]::CreateDirectory("$depsDir")
 
 Function print_hmsg($msg)
 {
     Write-Host "$msg" -ForegroundColor Green
 }
+
+print_hmsg "Set build dir to `"$buildDir`"."
+print_hmsg "Set deps dir to `"$depsDir`"."
 
 Function validate_result()
 {
@@ -88,12 +111,9 @@ validate_result
 Write-Host "`nVisual Studio Command Prompt variables set." -ForegroundColor Yellow
 #
 
-if(![System.IO.Directory]::Exists("$PWD/deps")){
-    mkdir deps
-}
-cd deps
+cd $depsDir
 
-$deps="$PWD"
+$deps="$depsDir"
 # Get zlib
 $zlibRoot="$PWD/zlib-1.2.8"
 if(![System.IO.Directory]::Exists("$zlibRoot")){
@@ -147,10 +167,14 @@ cd ../
 
 # Build LuaJIT
 print_hmsg "Building LuaJIT..."
-cd third_party_libs/luajit/src
-cmd.exe /c "`"$vcvars`" & msvcbuild.bat"
+cd $deps
+[System.IO.Directory]::CreateDirectory("$PWD/luajit_build")
+cd luajit_build
+cmake ../../third_party_libs/luajit -G "$generator"
 validate_result
-cd ../../../
+cmake --build "." --config "Release"
+validate_result
+$luaJitLib="$PWD/src/Release/luajit.lib"
 print_hmsg "Done!"
 
 # Download GeometricTools
@@ -239,11 +263,8 @@ print_hmsg "Done!"
 #if($false){
 # Configure
 print_hmsg "Configuring Pragma..."
-if(![System.IO.Directory]::Exists("$PWD/build")){
-    mkdir build
-}
 $rootDir=$PWD
-cd build
+cd $buildDir
 $installDir="$PWD/install"
 print_hmsg "Additional CMake args: $cmakeArgs"
 
@@ -255,8 +276,9 @@ $cmdCmake="cmake .. -G `"$generator`" ```
     -DDEPENDENCY_BOOST_REGEX_LIBRARY=`"$boostRoot/build/lib/Release/boost_regex.lib`" ```
     -DDEPENDENCY_BOOST_SYSTEM_LIBRARY=`"$boostRoot/build/lib/Release/boost_system.lib`" ```
     -DDEPENDENCY_BOOST_THREAD_LIBRARY=`"$boostRoot/build/lib/Release/boost_thread.lib`" ```
-    -DDEPENDENCY_GEOMETRIC_TOOLS_INCLUDE=`"$rootDir/deps/GeometricTools/GTE`" ```
+    -DDEPENDENCY_GEOMETRIC_TOOLS_INCLUDE=`"$depsDir/GeometricTools/GTE`" ```
     -DDEPENDENCY_LIBZIP_CONF_INCLUDE=`"$rootDir/build/third_party_libs/libzip`" ```
+    -DDEPENDENCY_LUAJIT_LIBRARY=`"$luaJitLib`" ```
     -DCMAKE_INSTALL_PREFIX:PATH=`"$installDir`" ```
 "
 $cmdCmake += $global:cmakeArgs
@@ -266,7 +288,7 @@ validate_result
 
 print_hmsg "Done!"
 
-print_hmsg "Build files have been written to \"$PWD/build\"."
+print_hmsg "Build files have been written to \"$buildDir\"."
 
 $curDir=$PWD
 if($with_pfm) {

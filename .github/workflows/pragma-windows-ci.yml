@@ -49,7 +49,7 @@ jobs:
         shell: pwsh
         run: |
           cd pragma
-          ./build_scripts/build_windows_2.ps1 -with_pfm -with_all_pfm_modules -with_vr -vcvars "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+          ./build_scripts/build_windows_2.ps1 -with_pfm -with_all_pfm_modules -with_vr -vcvars "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat" -build_directory="/c/pragma/build" -deps_directory="/c/pragma/deps"
           
       - uses: mxschmitt/action-tmate@v3.13
         name: CI
