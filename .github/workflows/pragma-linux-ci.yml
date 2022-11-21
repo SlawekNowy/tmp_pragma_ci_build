@@ -75,7 +75,11 @@ jobs:
         shell: bash
         run: |
           cd pragma
-          bash ./build_scripts/build_linux.sh
+          # bash ./build_scripts/build_linux.sh
+          bash ./build_scripts/build_linux.sh -build_directory "$PWD/build" -deps_directory "$PWD/deps" -install_directory "$PWD/install"
+          echo "All Files:"
+          ls -R
+          echo "---"
 
       - name: Build Pragma
         shell: bash
