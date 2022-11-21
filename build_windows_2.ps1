@@ -1,22 +1,22 @@
 param (
-	[string]$toolset = "msvc-14.2",
-	[string]$generator = "Visual Studio 17 2022",
-	[string]$vcvars = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat",
-	[switch]$with_essential_client_modules = $true,
-	[switch]$with_common_modules = $true,
-	[switch]$with_pfm = $false,
-	[switch]$with_core_pfm_modules = $true,
-	[switch]$with_all_pfm_modules = $false,
-	[switch]$with_vr = $false,
-	[switch]$build = $true,
-	[switch]$help = $false,
-	[string[]]$modules = @()
+    [string]$toolset = "msvc-14.2",
+    [string]$generator = "Visual Studio 17 2022",
+    [string]$vcvars = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat",
+    [switch]$with_essential_client_modules = $true,
+    [switch]$with_common_modules = $true,
+    [switch]$with_pfm = $false,
+    [switch]$with_core_pfm_modules = $true,
+    [switch]$with_all_pfm_modules = $false,
+    [switch]$with_vr = $false,
+    [switch]$build = $true,
+    [switch]$help = $false,
+    [string[]]$modules = @()
 )
 
 $ErrorActionPreference="Stop"
 
 Function display_help() {
-	Write-Host "This script will download and setup all of the required dependencies for building Pragma."
+    Write-Host "This script will download and setup all of the required dependencies for building Pragma."
     Write-Host "Usage: ./build_scripts/build_windows.ps1 [option...]"
     Write-Host ""
 
@@ -65,8 +65,8 @@ Function display_help() {
 }
 
 if($help){
-	display_help
-	Exit 0
+    display_help
+    Exit 0
 }
 
 $buildConfig="RelWithDebInfo"
@@ -79,7 +79,7 @@ Function print_hmsg($msg)
 
 Function validate_result()
 {
-	if (-not $?) {throw "Critical failure detected, execution will halt!"}
+    if (-not $?) {throw "Critical failure detected, execution will halt!"}
 }
 
 # Initialize VS env variables
@@ -89,7 +89,7 @@ Write-Host "`nVisual Studio Command Prompt variables set." -ForegroundColor Yell
 #
 
 if(![System.IO.Directory]::Exists("$PWD/deps")){
-	mkdir deps
+    mkdir deps
 }
 cd deps
 
@@ -97,10 +97,10 @@ $deps="$PWD"
 # Get zlib
 $zlibRoot="$PWD/zlib-1.2.8"
 if(![System.IO.Directory]::Exists("$zlibRoot")){
-	print_hmsg "zlib not found. Downloading..."
-	git clone "https://github.com/fmrico/zlib-1.2.8.git"
-	validate_result
-	print_hmsg "Done!"
+    print_hmsg "zlib not found. Downloading..."
+    git clone "https://github.com/fmrico/zlib-1.2.8.git"
+    validate_result
+    print_hmsg "Done!"
 }
 
 cd zlib-1.2.8
@@ -108,7 +108,7 @@ cd zlib-1.2.8
 # Build zlib
 print_hmsg "Building zlib..."
 if(![System.IO.Directory]::Exists("$PWD/build")){
-	mkdir build
+    mkdir build
 }
 cd build
 cmake .. -G $generator
@@ -119,50 +119,29 @@ cp zconf.h ../
 cd ../..
 print_hmsg "Done!"
 
-$boostRoot="$PWD/boost_1_78_0"
+$boostRoot="$PWD/boost"
 if(![System.IO.Directory]::Exists("$boostRoot")){
-	print_hmsg "boost not found. Downloading..."
-	Invoke-WebRequest "https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.zip" -OutFile "boost_1_78_0.zip"
-	validate_result
-	print_hmsg "Done!"
-
-	# Extract Boost
-	print_hmsg "Extracting boost..."
-	Add-Type -Assembly "System.IO.Compression.Filesystem"
-	[System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/boost_1_78_0.zip", "$PWD")
-	validate_result
-
-	rm boost_1_78_0.zip
-	print_hmsg "Done!"
+    print_hmsg "boost not found. Downloading..."
+    git clone "https://github.com/ClausKlein/boost-cmake.git" boost
+    validate_result
+    print_hmsg "Done!"
 }
 
-
-cd boost_1_78_0
+cd boost
 
 # Build Boost
-print_hmsg "Building boost..."
-cmd.exe /c "$PWD/bootstrap.bat"
-validate_result
-echo "Running: ./b2 toolset=$toolset address-model=64 stage variant=release link=shared runtime-link=shared -j3"
-./b2 toolset=$toolset address-model=64 stage variant=release link=shared runtime-link=shared -j3
-validate_result
-echo "Running: ./b2 toolset=$toolset address-model=64 stage variant=release link=static runtime-link=shared -j3"
-./b2 toolset=$toolset address-model=64 stage variant=release link=static runtime-link=shared -j3
-validate_result
-print_hmsg "Done!"
-
 $ZLIB_SOURCE="$PWD/../zlib-1.2.8"
 $ZLIB_INCLUDE="$PWD/../zlib-1.2.8"
 $ZLIB_LIBPATH="$PWD/../zlib-1.2.8/build/$buildConfig"
-print_hmsg "Building boost zlib libraries..."
-echo "Running: ./b2 toolset=`"$toolset`" address-model=64 stage variant=release link=shared runtime-link=shared --with-iostreams -sZLIB_SOURCE=`"$ZLIB_SOURCE`" -sZLIB_INCLUDE=`"$ZLIB_INCLUDE`" -sZLIB_LIBPATH=`"$ZLIB_LIBPATH`""
-./b2 toolset="$toolset" address-model=64 stage variant=release link=shared runtime-link=shared --with-iostreams -sZLIB_SOURCE="$ZLIB_SOURCE" -sZLIB_INCLUDE="$ZLIB_INCLUDE" -sZLIB_LIBPATH="$ZLIB_LIBPATH"
+print_hmsg "Building boost..."
+[System.IO.Directory]::CreateDirectory("$PWD/build")
+cd build
+cmake .. -G "$generator" -DBOOST_DISABLE_TESTS=ON -DZLIB_INCLUDE_DIR="$ZLIB_INCLUDE" -DZLIB_LIBRARY="$ZLIB_LIBPATH"
 validate_result
-echo "Running: ./b2 toolset=`"$toolset`" address-model=64 stage variant=release link=static runtime-link=shared --with-iostreams -sZLIB_SOURCE=`"$ZLIB_SOURCE`" -sZLIB_INCLUDE=`"$ZLIB_INCLUDE`" -sZLIB_LIBPATH=`"$ZLIB_LIBPATH`""
-./b2 toolset="$toolset" address-model=64 stage variant=release link=static runtime-link=shared --with-iostreams -sZLIB_SOURCE="$ZLIB_SOURCE" -sZLIB_INCLUDE="$ZLIB_INCLUDE" -sZLIB_LIBPATH="$ZLIB_LIBPATH"
+cmake --build "." --config "Release"
 validate_result
-cd ../
 print_hmsg "Done!"
+cd ../../
 
 cd ../
 
@@ -178,9 +157,9 @@ print_hmsg "Done!"
 cd $deps
 $geometricToolsRoot="$PWD/GeometricTools"
 if(![System.IO.Directory]::Exists("$geometricToolsRoot")){
-	print_hmsg "GeometricTools not found. Downloading..."
-	git clone "https://github.com/davideberly/GeometricTools"
-	validate_result
+    print_hmsg "GeometricTools not found. Downloading..."
+    git clone "https://github.com/davideberly/GeometricTools"
+    validate_result
 }
 cd GeometricTools
 git reset --hard bd7a27d18ac9f31641b4e1246764fe30816fae74
@@ -193,65 +172,65 @@ print_hmsg "Downloading modules..."
 cd modules
 
 if($with_essential_client_modules) {
-	$modules += "pr_prosper_vulkan:`"https://github.com/Silverlan/pr_prosper_vulkan.git`""
+    $modules += "pr_prosper_vulkan:`"https://github.com/Silverlan/pr_prosper_vulkan.git`""
 }
 
 if($with_common_modules) {
-	$modules += "pr_bullet:`"https://github.com/Silverlan/pr_bullet.git`""
-	$modules += "pr_audio_soloud:`"https://github.com/Silverlan/pr_soloud.git`""
+    $modules += "pr_bullet:`"https://github.com/Silverlan/pr_bullet.git`""
+    $modules += "pr_audio_soloud:`"https://github.com/Silverlan/pr_soloud.git`""
 }
 
 if($with_pfm) {
-	if($with_core_pfm_modules -Or $with_all_pfm_modules) {
-		$modules += "pr_curl:https://github.com/Silverlan/pr_curl.git"
-		$modules += "pr_dmx:https://github.com/Silverlan/pr_dmx.git"
-	}
-	if($with_all_pfm_modules) {
-		$modules += "pr_chromium:https://github.com/Silverlan/pr_chromium.git"
-		$modules += "pr_unirender:https://github.com/Silverlan/pr_cycles.git"
-		$modules += "pr_curl:https://github.com/Silverlan/pr_curl.git"
-		$modules += "pr_dmx:https://github.com/Silverlan/pr_dmx.git"
-		$modules += "pr_xatlas:https://github.com/Silverlan/pr_xatlas.git"
-	}
+    if($with_core_pfm_modules -Or $with_all_pfm_modules) {
+        $modules += "pr_curl:https://github.com/Silverlan/pr_curl.git"
+        $modules += "pr_dmx:https://github.com/Silverlan/pr_dmx.git"
+    }
+    if($with_all_pfm_modules) {
+        $modules += "pr_chromium:https://github.com/Silverlan/pr_chromium.git"
+        $modules += "pr_unirender:https://github.com/Silverlan/pr_cycles.git"
+        $modules += "pr_curl:https://github.com/Silverlan/pr_curl.git"
+        $modules += "pr_dmx:https://github.com/Silverlan/pr_dmx.git"
+        $modules += "pr_xatlas:https://github.com/Silverlan/pr_xatlas.git"
+    }
 }
 
 if($with_vr) {
-	$modules += "pr_openvr:https://github.com/Silverlan/pr_openvr.git"
+    $modules += "pr_openvr:https://github.com/Silverlan/pr_openvr.git"
 }
 
 $moduleList=""
 $global:cmakeArgs=""
 foreach ( $module in $modules )
 {
-	$index=$module.IndexOf(":")
-	$components=$module.Split(":")
-	$moduleName=$module.SubString(0,$index)
-	$moduleUrl=$module.SubString($index +1)
-	$moduleDir="$PWD/$moduleName/"
-	if(![System.IO.Directory]::Exists("$moduleDir")){
-		print_hmsg "Downloading module '$moduleName'..."
-		git clone "$moduleUrl" --recurse-submodules $moduleName
-		validate_result
-		print_hmsg "Done!"
-	}
-	else{
-		print_hmsg "Updating module '$moduleName'..."
-		git pull
-		validate_result
-		print_hmsg "Done!"
-	}
-	
-	if([System.IO.File]::Exists("$moduleDir/build_scripts/setup_windows.ps1")){
-		print_hmsg "Executing module setup script..."
-		$curDir=$PWD
-		& "$PWD/$moduleName/build_scripts/setup_windows.ps1"
-		validate_result
-		cd $curDir
-		print_hmsg "Done!"
-	}
+    $index=$module.IndexOf(":")
+    $components=$module.Split(":")
+    $moduleName=$module.SubString(0,$index)
+    $moduleUrl=$module.SubString($index +1)
+    $moduleDir="$PWD/$moduleName/"
+    if(![System.IO.Directory]::Exists("$moduleDir")){
+        print_hmsg "Downloading module '$moduleName'..."
+        git clone "$moduleUrl" --recurse-submodules $moduleName
+        validate_result
+        print_hmsg "Done!"
+    }
+    else{
+        print_hmsg "Updating module '$moduleName'..."
+        git pull
+        validate_result
+        print_hmsg "Done!"
+    }
+    
+    if([System.IO.File]::Exists("$moduleDir/build_scripts/setup_windows.ps1")){
+        print_hmsg "Executing module setup script..."
+        $curDir=$PWD
+        & "$PWD/$moduleName/build_scripts/setup_windows.ps1"
+        validate_result
+        cd $curDir
+        print_hmsg "Done!"
+    }
 
-	$moduleList += " "
-	$moduleList += $moduleName
+    $moduleList += " "
+    $moduleList += $moduleName
 }
 
 cd ..
@@ -261,7 +240,7 @@ print_hmsg "Done!"
 # Configure
 print_hmsg "Configuring Pragma..."
 if(![System.IO.Directory]::Exists("$PWD/build")){
-	mkdir build
+    mkdir build
 }
 $rootDir=$PWD
 cd build
@@ -269,16 +248,16 @@ $installDir="$PWD/install"
 print_hmsg "Additional CMake args: $cmakeArgs"
 
 $cmdCmake="cmake .. -G `"$generator`" ```
-	-DDEPENDENCY_BOOST_INCLUDE=`"$rootDir/deps/boost_1_78_0`" ```
-	-DDEPENDENCY_BOOST_LIBRARY_LOCATION=`"$rootDir/deps/boost_1_78_0/stage/lib`" ```
-	-DDEPENDENCY_BOOST_CHRONO_LIBRARY=`"$rootDir/deps/boost_1_78_0/stage/lib/boost_chrono-vc142-mt-x64-1_78.lib`" ```
-	-DDEPENDENCY_BOOST_DATE_TIME_LIBRARY=`"$rootDir/deps/boost_1_78_0/stage/lib/boost_date_time-vc142-mt-x64-1_78.lib`" ```
-	-DDEPENDENCY_BOOST_REGEX_LIBRARY=`"$rootDir/deps/boost_1_78_0/stage/lib/boost_regex-vc142-mt-x64-1_78.lib`" ```
-	-DDEPENDENCY_BOOST_SYSTEM_LIBRARY=`"$rootDir/deps/boost_1_78_0/stage/lib/boost_system-vc142-mt-x64-1_78.lib`" ```
-	-DDEPENDENCY_BOOST_THREAD_LIBRARY=`"$rootDir/deps/boost_1_78_0/stage/lib/boost_thread-vc142-mt-x64-1_78.lib`" ```
-	-DDEPENDENCY_GEOMETRIC_TOOLS_INCLUDE=`"$rootDir/deps/GeometricTools/GTE`" ```
-	-DDEPENDENCY_LIBZIP_CONF_INCLUDE=`"$rootDir/build/third_party_libs/libzip`" ```
-	-DCMAKE_INSTALL_PREFIX:PATH=`"$installDir`" ```
+    -DDEPENDENCY_BOOST_INCLUDE=`"$boostRoot/build/_deps/boost-src`" ```
+    -DDEPENDENCY_BOOST_LIBRARY_LOCATION=`"$boostRoot/build/lib/Release`" ```
+    -DDEPENDENCY_BOOST_CHRONO_LIBRARY=`"$boostRoot/build/lib/Release/boost_chrono.lib`" ```
+    -DDEPENDENCY_BOOST_DATE_TIME_LIBRARY=`"$boostRoot/build/lib/Release/boost_date_time.lib`" ```
+    -DDEPENDENCY_BOOST_REGEX_LIBRARY=`"$boostRoot/build/lib/Release/boost_regex.lib`" ```
+    -DDEPENDENCY_BOOST_SYSTEM_LIBRARY=`"$boostRoot/build/lib/Release/boost_system.lib`" ```
+    -DDEPENDENCY_BOOST_THREAD_LIBRARY=`"$boostRoot/build/lib/Release/boost_thread.lib`" ```
+    -DDEPENDENCY_GEOMETRIC_TOOLS_INCLUDE=`"$rootDir/deps/GeometricTools/GTE`" ```
+    -DDEPENDENCY_LIBZIP_CONF_INCLUDE=`"$rootDir/build/third_party_libs/libzip`" ```
+    -DCMAKE_INSTALL_PREFIX:PATH=`"$installDir`" ```
 "
 $cmdCmake += $global:cmakeArgs
 
@@ -291,56 +270,57 @@ print_hmsg "Build files have been written to \"$PWD/build\"."
 
 $curDir=$PWD
 if($with_pfm) {
-	print_hmsg "Downloading PFM addon..."
-	[System.IO.Directory]::CreateDirectory("$installDir/addons")
-	cd "$installDir/addons"
-	if(![System.IO.Directory]::Exists("$installDir/addons/pfm")){
-		git clone "https://github.com/Silverlan/pfm.git"
-		validate_result
-	} else {
-		print_hmsg "Updating PFM..."
-		git pull
-		validate_result
-		print_hmsg "Done!"
-	}
-	print_hmsg "Done!"
+    print_hmsg "Downloading PFM addon..."
+    [System.IO.Directory]::CreateDirectory("$installDir/addons")
+    cd "$installDir/addons"
+    if(![System.IO.Directory]::Exists("$installDir/addons/pfm")){
+        git clone "https://github.com/Silverlan/pfm.git"
+        validate_result
+    } else {
+        print_hmsg "Updating PFM..."
+        git pull
+        validate_result
+        print_hmsg "Done!"
+    }
+    print_hmsg "Done!"
 }
 
 if($with_vr) {
-	print_hmsg "Downloading VR addon..."
-	[System.IO.Directory]::CreateDirectory("$installDir/addons")
-	cd "$installDir/addons"
-	if(![System.IO.Directory]::Exists("$installDir/addons/virtual_reality")){
-		git clone "https://github.com/Silverlan/PragmaVR.git" virtual_reality
-		validate_result
-	} else {
-		print_hmsg "Updating VR..."
-		git pull
-		validate_result
-		print_hmsg "Done!"
-	}
-	print_hmsg "Done!"
+    print_hmsg "Downloading VR addon..."
+    [System.IO.Directory]::CreateDirectory("$installDir/addons")
+    cd "$installDir/addons"
+    if(![System.IO.Directory]::Exists("$installDir/addons/virtual_reality")){
+        git clone "https://github.com/Silverlan/PragmaVR.git" virtual_reality
+        validate_result
+    } else {
+        print_hmsg "Updating VR..."
+        git pull
+        validate_result
+        print_hmsg "Done!"
+    }
+    print_hmsg "Done!"
 }
 cd $curDir
 
+echo "BUILD VALUE: $build"
 if($build) {
-	print_hmsg "Building Pragma..."
-	$targets="pragma-install-full $moduleList"
-	if($with_pfm) {
-		$targets+=" pfm"
-	}
-	$targets+=" pragma-install"
+    print_hmsg "Building Pragma..."
+    $targets="pragma-install-full $moduleList"
+    if($with_pfm) {
+        $targets+=" pfm"
+    }
+    $targets+=" pragma-install"
 
-	$cmakeBuild="cmake --build `".`" --config `"$buildConfig`" --target $targets"
-	echo "Running build command:"
-	echo "$cmakeBuild"
-	iex $cmakeBuild
-	validate_result
+    $cmakeBuild="cmake --build `".`" --config `"$buildConfig`" --target $targets"
+    echo "Running build command:"
+    echo "$cmakeBuild"
+    iex $cmakeBuild
+    validate_result
 
-	print_hmsg "Build Successful! Pragma has been installed to `"$installDir`"."
-	print_hmsg "If you make any changes to the core source code, you can build the `"pragma-install`" target to compile the changes and re-install the binaries automatically."
-	print_hmsg "If you make any changes to a module, you will have to build the module target first, and then build `"pragma-install`"."
-	print_hmsg ""
+    print_hmsg "Build Successful! Pragma has been installed to `"$installDir`"."
+    print_hmsg "If you make any changes to the core source code, you can build the `"pragma-install`" target to compile the changes and re-install the binaries automatically."
+    print_hmsg "If you make any changes to a module, you will have to build the module target first, and then build `"pragma-install`"."
+    print_hmsg ""
 }
 
 print_hmsg "All actions have been completed! Please make sure to re-run this script every time you pull any changes from the repository, and after adding any new modules."
