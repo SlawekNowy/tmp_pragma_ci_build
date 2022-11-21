@@ -53,13 +53,13 @@ Function display_help() {
     Write-Host "   -build                            Build Pragma after configurating and generating build files. Default: " -NoNewline
     Write-Host "true" -ForegroundColor Green
 
-    Write-Host "   -build_directory                  Directory to write the build files to. Default: " -NoNewline
+    Write-Host "   -build_directory                  Directory to write the build files to. Can be relative or absolute. Default: " -NoNewline
     Write-Host "build"
 
-    Write-Host "   -deps_directory                   Directory to write the dependency files to. Default: " -NoNewline
+    Write-Host "   -deps_directory                   Directory to write the dependency files to. Can be relative or absolute. Default: " -NoNewline
     Write-Host "deps"
 
-    Write-Host "   -install_directory                Directory to write the install files to (relative to the build directory). Default: " -NoNewline
+    Write-Host "   -install_directory                Directory to write the build files to. Can be relative (to build directory) or absolute. Default: " -NoNewline
     Write-Host "install"
 
     Write-Host "   -help                             Display this help"
