@@ -83,19 +83,9 @@ Function validate_result()
 }
 
 # Initialize VS env variables
-$vcvarsScript="C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/Tools/VsDevCmd.bat -host_arch=amd64 -arch=amd64"
-$vcvarsScriptPath=Split-Path $vcvarsScript -Parent
-$vcvarsScriptFile=Split-Path $vcvarsScript -leaf
-# See https://stackoverflow.com/a/2124759/1879228
-pushd "$vcvarsScriptPath"
-cmd /c "$vcvarsScriptFile&set" |
-foreach {
-if ($_ -match "=") {
-	$v = $_.split("=", 2); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])" 
-}
-}
-popd
-Write-Host "`nVisual Studio 2022 Command Prompt variables set." -ForegroundColor Yellow
+& $PSScriptRoot\Windows\Invoke-Environment 'call "$vcvars"'
+validate_result
+Write-Host "`nVisual Studio Command Prompt variables set." -ForegroundColor Yellow
 #
 
 if(![System.IO.Directory]::Exists("$PWD/deps")){

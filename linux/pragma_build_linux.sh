@@ -8,6 +8,7 @@ with_core_pfm_modules=1
 with_all_pfm_modules=0
 with_vr=0
 modules=0
+build=1
 
 arg_to_bool () {
     if [ "$1" = true ] || [ "$1" = "TRUE" ] || [ "$1" = 1 ] || [ "$1" = "on" ] || [ "$1" = "ON" ] || [ "$1" = "enabled" ] || [ "$1" = "ENABLED" ]; then
@@ -259,6 +260,8 @@ if [ $with_vr -eq 1 ]; then
 	modules+=( "pr_openvr:https://github.com/Silverlan/pr_openvr.git" )
 fi
 
+moduleList=""
+cmakeArgs=""
 for module in "${modules[@]}"
 do
     strindex "$module" ":"
@@ -287,10 +290,9 @@ do
 		cd $curDir
 		echo "Done!"
 	fi
-done
 
-moduleList=""
-cmakeArgs=""
+	moduleList="$moduleList $moduleName"
+done
 
 cd ..
 echo "Done!"
@@ -318,6 +320,63 @@ cmake .. -G "$generator" \
 	-DCMAKE_INSTALL_PREFIX:PATH="$installDir" \
     -DDEPENDENCY_SPIRV_TOOLS_DIR="$deps/SPIRV-Tools" \
     -DDEPENDENCY_VULKAN_LIBRARY="/lib/x86_64-linux-gnu/libvulkan.so"
+
+print_hmsg "Done!"
+
+print_hmsg "Build files have been written to \"$PWD/build\"."
+
+curDir="$PWD"
+if [ $with_pfm -eq 1 ]; then
+	print_hmsg "Downloading PFM addon..."
+  mkdir -p "$installDir/addons"
+	cd "$installDir/addons"
+  if [ ! -d "$installDir/addons/pfm" ]; then
+		git clone "https://github.com/Silverlan/pfm.git"
+		validate_result
+  else
+		print_hmsg "Updating PFM..."
+		git pull
+		validate_result
+  fi
+	print_hmsg "Done!"
+fi
+
+if [ $with_vr -eq 1 ]; then
+	print_hmsg "Downloading VR addon..."
+  mkdir -p "$installDir/addons"
+	cd "$installDir/addons"
+  if [ ! -d "$installDir/addons/virtual_reality" ]; then
+		git clone "https://github.com/Silverlan/PragmaVR.git" virtual_reality
+		validate_result
+  else
+		print_hmsg "Updating VR..."
+		git pull
+		validate_result
+  fi
+	print_hmsg "Done!"
+fi
+cd $curDir
+
+if [ $build -eq 1 ]; then
+	print_hmsg "Building Pragma..."
+	targets="pragma-install-full $moduleList"
+	if [ $with_pfm -eq 1 ]; then
+	  targets="$targets pfm"
+	fi
+	targets="$targets pragma-install"
+
+	cmakeBuild="cmake --build \".\" --config \"$buildConfig\" --target $targets"
+	echo "Running build command:"
+	echo "$cmakeBuild"
+  eval "$cmakeBuild"
+	validate_result
+
+	print_hmsg "Build Successful! Pragma has been installed to \"$installDir\"."
+	print_hmsg "If you make any changes to the core source code, you can build the \"pragma-install\" target to compile the changes and re-install the binaries automatically."
+	print_hmsg "If you make any changes to a module, you will have to build the module target first, and then build \"pragma-install\"."
+	print_hmsg ""
+fi
+
 
 # cmake --build "." --config $buildConfig --target pragma-install-full
 # cmake --build "." --config "RelWithDebInfo" --target pragma-install-full

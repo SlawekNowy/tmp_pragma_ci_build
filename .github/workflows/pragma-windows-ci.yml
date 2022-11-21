@@ -37,6 +37,8 @@ jobs:
         run: |
           git clone https://github.com/Silverlan/pragma.git --recurse-submodules
           cp build_windows_2.ps1 pragma/build_scripts/
+          mkdir -p pragma/build_scripts/windows/
+          cp Invoke-Environment.ps1 pragma/build_scripts/windows/
 
       - name: Preprocessing
         shell: bash
