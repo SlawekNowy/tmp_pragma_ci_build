@@ -5,9 +5,9 @@ on:
   pull_request:
     branches: [ main ]
 
-concurrency:
-  group: environment-lin-${{ github.ref }}
-  cancel-in-progress: true
+#concurrency:
+#  group: environment-lin-${{ github.ref }}
+#  cancel-in-progress: true
 
 jobs:
   build:
@@ -76,7 +76,7 @@ jobs:
         run: |
           cd pragma
           # bash ./build_scripts/build_linux.sh
-          bash ./build_scripts/build_linux.sh --build_directory "$PWD/build" --deps_directory "$PWD/deps" --install_directory "$PWD/install"
+          bash ./build_scripts/build_linux.sh --build_directory="$PWD/build" --deps_directory="$PWD/deps" --install_directory="$PWD/install"
           echo "All Files:"
           ls -R
           echo "---"
