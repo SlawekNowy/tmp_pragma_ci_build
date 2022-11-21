@@ -1,5 +1,5 @@
-toolset="clang++-14"
-toolset_cc="clang-14"
+cxx_compiler="clang++-14"
+c_compiler="clang-14"
 generator="Unix Makefiles"
 with_essential_client_modules=1
 with_common_modules=1
@@ -7,8 +7,13 @@ with_pfm=0
 with_core_pfm_modules=1
 with_all_pfm_modules=0
 with_vr=0
-modules=0
+modules=""
 build=1
+build_config="RelWithDebInfo"
+build_directory="build"
+deps_directory="deps"
+install_directory="install"
+help=0
 
 arg_to_bool () {
     if [ "$1" = true ] || [ "$1" = "TRUE" ] || [ "$1" = 1 ] || [ "$1" = "on" ] || [ "$1" = "ON" ] || [ "$1" = "enabled" ] || [ "$1" = "ENABLED" ]; then
@@ -24,14 +29,87 @@ print_hmsg () {
     printf "${GREEN}$1${NC}\n"
 }
 
+is_abs_path () {
+	if [ "${1:0:1}" = "/" ]; then
+		echo 1
+	fi
+	echo 0
+}
+
+display_help () {
+	RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    GRAY='\033[0;37m'
+    NC='\033[0m' # No Color
+    echo "This script will download and setup all of the required dependencies for building Pragma."
+    echo "Usage: ./build_scripts/build_windows.ps1 [option...]"
+    echo ""
+
+    echo "   -c_compiler                       The C-compiler to use. Default: " -n
+    echo "\"clang-14\""
+
+    echo "   -cxx_compiler                     The C++-compiler to use. Default: " -n
+    echo "\"clang++-14\""
+
+    echo "   -generator                        The generator to use. Default: " -n
+    echo "\"Unix Makefiles\""
+
+    echo "   -with_essential_client_modules    Include essential modules required to run Pragma. Default: " -n
+    echo "${GREEN}true${NC}"
+
+    echo "   -with_common_modules              Include non-essential but commonly used modules (e.g. audio and physics modules). Default: " -n
+    echo "${GREEN}true${NC}"
+
+    echo "   -with_pfm                         Include the Pragma Filmmaker. Default: " -n
+    echo "${RED}false${NC}"
+
+    echo "   -with_core_pfm_modules            Include essential PFM modules. Default: " -n
+    echo "${GREEN}true${NC}"
+
+    echo "   -with_all_pfm_modules             Include non-essential PFM modules (e.g. chromium and cycles). Default: " -n
+    echo "${RED}false${NC}"
+
+    echo "   -with_vr                          Include Virtual Reality support. Default: " -n
+    echo "${RED}false${NC}"
+
+    echo "   -build                            Build Pragma after configurating and generating build files. Default: " -n
+    echo "${GREEN}true${NC}"
+
+    echo "   -build_config                     The build configuration to use. Default: " -n
+    echo "RelWithDebInfo"
+
+    echo "   -build_directory                  Directory to write the build files to. Can be relative or absolute. Default: " -n
+    echo "build"
+
+    echo "   -deps_directory                   Directory to write the dependency files to. Can be relative or absolute. Default: " -n
+    echo "deps"
+
+    echo "   -install_directory                Installation directory. Can be relative (to build directory) or absolute. Default: " -n
+    echo "install"
+
+    echo "   -help                             Display this help"
+    echo "   -modules                          Custom modules to install. Usage example: " -n
+    echo "${GRAY}-modules pr_prosper_vulkan:\"https://github.com/Silverlan/pr_prosper_vulkan.git\",pr_bullet:\"https://github.com/Silverlan/pr_bullet.git\"${NC}"
+    echo ""
+
+    echo "Examples:"
+    echo "- Build Pragma with clang-14:"
+    echo "${GRAY}bash ./build_scripts/build_linux.sh -cxx_compiler \"clang++-14\" -c_compiler \"clang-14\" -generator \"Unix Makefiles\"${NC}"
+    echo ""
+    echo "- Build Pragma with PFM and VR support with clang-14:"
+    echo "${GRAY}bash ./build_scripts/build_linux.sh -with_pfm -with_all_pfm_modules -with_vr -cxx_compiler \"clang++-14\" -c_compiler \"clang-14\" -generator \"Unix Makefiles\"${NC}"
+    exit 0
+}
+
+displayHelp=0
 for i in "$@"; do
   case $i in
-    -t=*|--toolset=*)
-      toolset="${i#*=}"
+    -t=*|--cxx_compiler=*)
+      cxx_compiler="${i#*=}"
       shift # past argument=value
       ;;
-    -c=*|--toolset_cc=*)
-      toolset_cc="${i#*=}"
+    -c=*|--c_compiler=*)
+      c_compiler="${i#*=}"
       shift # past argument=value
       ;;
     -g=*|--generator=*)
@@ -97,6 +175,26 @@ for i in "$@"; do
       modules="${i#*=}"
       shift # past argument=value
       ;;
+    --build_config=*)
+      build_config="${i#*=}"
+      shift # past argument=value
+      ;;
+    --build_directory=*)
+      build_directory="${i#*=}"
+      shift # past argument=value
+      ;;
+    --deps_directory=*)
+      deps_directory="${i#*=}"
+      shift # past argument=value
+      ;;
+    --install_directory=*)
+      install_directory="${i#*=}"
+      shift # past argument=value
+      ;;
+    --help)
+      displayHelp=1
+      shift # past argument with no value
+      ;;
     -*|--*)
       echo "Unknown option $i"
       exit 1
@@ -105,6 +203,30 @@ for i in "$@"; do
       ;;
   esac
 done
+
+if [ $displayHelp -eq 1 ]; then
+	display_help
+	exit 0
+fi
+
+# Print Inputs
+echo "Inputs:"
+echo "cxx_compiler: $cxx_compiler"
+echo "c_compiler: $c_compiler"
+echo "generator: $generator"
+echo "with_essential_client_modules: $with_essential_client_modules"
+echo "with_common_modules: $with_common_modules"
+echo "with_pfm: $with_pfm"
+echo "with_core_pfm_modules: $with_core_pfm_modules"
+echo "with_all_pfm_modules: $with_all_pfm_modules"
+echo "with_vr: $with_vr"
+echo "build: $build"
+echo "build_config: $build_config"
+echo "build_directory: $build_directory"
+echo "deps_directory: $deps_directory"
+echo "install_directory: $install_directory"
+echo "modules: $modules"
+#
 
 strindex() { 
   x="${1%%"$2"*}"
@@ -122,18 +244,34 @@ validate_result() {
 }
 
 # Linux
-export CC="$toolset_cc"
-export CXX="$toolset"
+export CC="$c_compiler"
+export CXX="$cxx_compiler"
 #
 
-buildConfig="RelWithDebInfo"
+buildConfig="$build_config"
 root="$PWD"
+buildDir="$build_directory"
+depsDir="$deps_directory"
+installDir="$install_directory"
 
-if [ ! -d "$PWD/deps" ]; then
-	mkdir deps
+isBuildDirAbs=$(echo is_abs_path $buildDir)
+if [ ! $isBuildDirAbs -eq 1 ]; then
+	buildDir="$PWD/$buildDir"
+fi
+isDepsDirAbs=$(echo is_abs_path $depsDir)
+if [ ! $isDepsDirAbs -eq 1 ]; then
+	depsDir="$PWD/$depsDir"
+fi
+isInstallDirAbs=$(echo is_abs_path $installDir)
+if [ ! $isInstallDirAbs -eq 1 ]; then
+	installDir="$PWD/$installDir"
 fi
 
-cd deps
+mkdir -p "$buildDir"
+mkdir -p "$depsDir"
+mkdir -p "$installDir"
+
+cd $depsDir
 
 deps="$PWD"
 # Get zlib
@@ -200,7 +338,7 @@ echo "Done!"
 
 # Download GeometricTools
 echo "Downloading GeometricTools..."
-cd deps
+cd $deps
 git clone https://github.com/davideberly/GeometricTools
 cd GeometricTools
 git reset --hard bd7a27d18ac9f31641b4e1246764fe30816fae74
@@ -209,7 +347,7 @@ echo "Done!"
 
 # Download SPIRV-Tools
 echo "Downloading SPIRV-Tools..."
-cd deps
+cd $deps
 git clone https://github.com/KhronosGroup/SPIRV-Tools.git
 cd SPIRV-Tools
 git reset --hard 7826e19
@@ -218,7 +356,7 @@ echo "Done!"
 
 # Download SPIRV-Headers
 echo "Downloading SPIRV-Headers..."
-cd deps
+cd $deps
 cd SPIRV-Tools/external
 git clone https://github.com/KhronosGroup/SPIRV-Headers
 cd SPIRV-Headers
@@ -299,31 +437,27 @@ echo "Done!"
 
 # Configure
 echo "Configuring Pragma..."
-if [ ! -d "$PWD/build" ]; then
-	mkdir build
-fi
 rootDir=$PWD
-cd build
-installDir="$PWD/install"
+cd $buildDir
 echo "Additional CMake args: $cmakeArgs"
 
 cmake .. -G "$generator" \
-	-DDEPENDENCY_BOOST_INCLUDE="$rootDir/deps/boost_1_78_0" \
-	-DDEPENDENCY_BOOST_LIBRARY_LOCATION="$rootDir/deps/boost_1_78_0/stage/lib" \
-	-DDEPENDENCY_BOOST_CHRONO_LIBRARY="$rootDir/deps/boost_1_78_0/stage/lib/boost_chrono.a" \
-	-DDEPENDENCY_BOOST_DATE_TIME_LIBRARY="$rootDir/deps/boost_1_78_0/stage/lib/boost_date_time.a" \
-	-DDEPENDENCY_BOOST_REGEX_LIBRARY="$rootDir/deps/boost_1_78_0/stage/lib/boost_regex.a" \
-	-DDEPENDENCY_BOOST_SYSTEM_LIBRARY="$rootDir/deps/boost_1_78_0/stage/lib/boost_system.a" \
-	-DDEPENDENCY_BOOST_THREAD_LIBRARY="$rootDir/deps/boost_1_78_0/stage/lib/boost_thread.a" \
-	-DDEPENDENCY_GEOMETRIC_TOOLS_INCLUDE="$rootDir/deps/GeometricTools/GTE" \
-	-DDEPENDENCY_LIBZIP_CONF_INCLUDE="$rootDir/build/third_party_libs/libzip" \
+	-DDEPENDENCY_BOOST_INCLUDE="$deps/boost_1_78_0" \
+	-DDEPENDENCY_BOOST_LIBRARY_LOCATION="$deps/boost_1_78_0/stage/lib" \
+	-DDEPENDENCY_BOOST_CHRONO_LIBRARY="$deps/boost_1_78_0/stage/lib/boost_chrono.a" \
+	-DDEPENDENCY_BOOST_DATE_TIME_LIBRARY="$deps/boost_1_78_0/stage/lib/boost_date_time.a" \
+	-DDEPENDENCY_BOOST_REGEX_LIBRARY="$deps/boost_1_78_0/stage/lib/boost_regex.a" \
+	-DDEPENDENCY_BOOST_SYSTEM_LIBRARY="$deps/boost_1_78_0/stage/lib/boost_system.a" \
+	-DDEPENDENCY_BOOST_THREAD_LIBRARY="$deps/boost_1_78_0/stage/lib/boost_thread.a" \
+	-DDEPENDENCY_GEOMETRIC_TOOLS_INCLUDE="$deps/GeometricTools/GTE" \
+	-DDEPENDENCY_LIBZIP_CONF_INCLUDE="$buildDir/third_party_libs/libzip" \
 	-DCMAKE_INSTALL_PREFIX:PATH="$installDir" \
     -DDEPENDENCY_SPIRV_TOOLS_DIR="$deps/SPIRV-Tools" \
     -DDEPENDENCY_VULKAN_LIBRARY="/lib/x86_64-linux-gnu/libvulkan.so"
 
 print_hmsg "Done!"
 
-print_hmsg "Build files have been written to \"$PWD/build\"."
+print_hmsg "Build files have been written to \"$buildDir\"."
 
 curDir="$PWD"
 if [ $with_pfm -eq 1 ]; then
@@ -365,10 +499,11 @@ if [ $build -eq 1 ]; then
 	fi
 	targets="$targets pragma-install"
 
+	cd "$buildDir"
 	cmakeBuild="cmake --build \".\" --config \"$buildConfig\" --target $targets"
 	echo "Running build command:"
 	echo "$cmakeBuild"
-  eval "$cmakeBuild"
+  	eval "$cmakeBuild"
 	validate_result
 
 	print_hmsg "Build Successful! Pragma has been installed to \"$installDir\"."
@@ -380,10 +515,3 @@ fi
 
 # cmake --build "." --config $buildConfig --target pragma-install-full
 # cmake --build "." --config "RelWithDebInfo" --target pragma-install-full
-
-#if($false){
-#if(![System.IO.Directory]::Exists("$pwd/deps")){
-#	mkdir deps
-#}
-#cd deps
-

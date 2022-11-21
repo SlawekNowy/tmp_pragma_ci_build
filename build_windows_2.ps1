@@ -9,29 +9,13 @@ param (
     [switch]$with_all_pfm_modules = $false,
     [switch]$with_vr = $false,
     [switch]$build = $true,
+    [string]$build_config = "RelWithDebInfo",
     [string]$build_directory = "build",
     [string]$deps_directory = "deps",
     [string]$install_directory = "install",
     [switch]$help = $false,
     [string[]]$modules = @()
 )
-
-echo "Inputs:"
-echo "toolset: $toolset"
-echo "generator: $generator"
-echo "vcvars: $vcvars"
-echo "with_essential_client_modules: $with_essential_client_modules"
-echo "with_common_modules: $with_common_modules"
-echo "with_pfm: $with_pfm"
-echo "with_core_pfm_modules: $with_core_pfm_modules"
-echo "with_all_pfm_modules: $with_all_pfm_modules"
-echo "with_vr: $with_vr"
-echo "build: $build"
-echo "build_directory: $build_directory"
-echo "deps_directory: $deps_directory"
-echo "install_directory: $install_directory"
-$strModules=[string]$modules
-echo "modules: $strModules"
 
 $ErrorActionPreference="Stop"
 
@@ -70,6 +54,9 @@ Function display_help() {
     Write-Host "   -build                            Build Pragma after configurating and generating build files. Default: " -NoNewline
     Write-Host "true" -ForegroundColor Green
 
+    Write-Host "   -build_config                     The build configuration to use. Default: " -NoNewline
+    Write-Host "RelWithDebInfo"
+
     Write-Host "   -build_directory                  Directory to write the build files to. Can be relative or absolute. Default: " -NoNewline
     Write-Host "build"
 
@@ -98,7 +85,27 @@ if($help){
     Exit 0
 }
 
-$buildConfig="RelWithDebInfo"
+# Print Inputs
+echo "Inputs:"
+echo "toolset: $toolset"
+echo "generator: $generator"
+echo "vcvars: $vcvars"
+echo "with_essential_client_modules: $with_essential_client_modules"
+echo "with_common_modules: $with_common_modules"
+echo "with_pfm: $with_pfm"
+echo "with_core_pfm_modules: $with_core_pfm_modules"
+echo "with_all_pfm_modules: $with_all_pfm_modules"
+echo "with_vr: $with_vr"
+echo "build: $build"
+echo "build_config: $build_config"
+echo "build_directory: $build_directory"
+echo "deps_directory: $deps_directory"
+echo "install_directory: $install_directory"
+$strModules=[string]$modules
+echo "modules: $strModules"
+#
+
+$buildConfig="$build_config"
 $root="$PWD"
 $buildDir="$build_directory"
 $depsDir="$deps_directory"
@@ -197,7 +204,7 @@ print_hmsg "Building LuaJIT..."
 cd $deps
 [System.IO.Directory]::CreateDirectory("$PWD/luajit_build")
 cd luajit_build
-cmake ../../third_party_libs/luajit -G "$generator"
+cmake "$root/third_party_libs/luajit" -G "$generator"
 validate_result
 cmake --build "." --config "Release"
 validate_result
@@ -220,7 +227,7 @@ print_hmsg "Done!"
 #}
 # Download modules
 print_hmsg "Downloading modules..."
-cd modules
+cd "$root/modules"
 
 if($with_essential_client_modules) {
     $modules += "pr_prosper_vulkan:`"https://github.com/Silverlan/pr_prosper_vulkan.git`""
