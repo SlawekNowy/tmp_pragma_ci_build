@@ -41,6 +41,9 @@ jobs:
           sudo apt install libstdc++-12-dev
           sudo apt install libstdc++6
 
+          # Vulkan
+          sudo apt-get install libxcb-keysyms1-dev
+
           # GLFW
           sudo apt install xorg-dev
 
