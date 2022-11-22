@@ -38,6 +38,7 @@ jobs:
           git clone https://github.com/Silverlan/pragma.git --recurse-submodules
           
           cd pragma/third_party_libs/libpng
+          git checkout libpng16
           git pull
           cd ../../../
           
