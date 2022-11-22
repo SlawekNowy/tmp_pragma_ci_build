@@ -43,6 +43,7 @@ jobs:
 
           # Vulkan
           sudo apt-get install libxcb-keysyms1-dev
+          sudo apt-get install xcb libxcb-xkb-dev x11-xkb-utils libx11-xcb-dev libxkbcommon-x11-dev
 
           # GLFW
           sudo apt install xorg-dev
@@ -62,6 +63,13 @@ jobs:
 
           # TODO: Install CMake
           # TODO: Install Vulkan SDK
+
+      - name: Prepare Vulkan SDK
+        uses: humbletim/setup-vulkan-sdk@v1.2.0
+        with:
+          vulkan-query-version: 1.3.211.0
+          vulkan-components: Vulkan-Headers, Vulkan-Loader, Glslang
+          vulkan-use-cache: true
 
       - name: Download Pragma
         shell: bash
