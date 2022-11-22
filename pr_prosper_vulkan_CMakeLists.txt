@@ -130,8 +130,9 @@ if("${VULKAN_SDK}" STREQUAL "")
 
     endif()
 else()
-
-    set(DEPENDENCY_SPIRV_TOOLS_DIR "${VULKAN_SDK}/spirv-tools" CACHE PATH "Path to spirv-tools repo" FORCE)
+    if("${DEPENDENCY_SPIRV_TOOLS_DIR}" STREQUAL "")
+        set(DEPENDENCY_SPIRV_TOOLS_DIR "${VULKAN_SDK}/spirv-tools" CACHE PATH "Path to spirv-tools repo" FORCE)
+    endif()
     add_subdirectory(${DEPENDENCY_SPIRV_TOOLS_DIR} third_party_libs/vulkan/spirv-tools)
 endif()
 
