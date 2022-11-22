@@ -363,7 +363,7 @@ cd $deps
 cd SPIRV-Tools/external
 git clone https://github.com/KhronosGroup/SPIRV-Headers
 cd SPIRV-Headers
-git reset --hard 5a121866927a16ab9d49bed4788b532c7fcea766
+git reset --hard 4995a2f2723c401eb0ea3e10c81298906bf1422b
 cd ../../
 cd ../../
 echo "Done!"
