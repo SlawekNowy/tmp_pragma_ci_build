@@ -36,6 +36,11 @@ jobs:
         shell: pwsh
         run: |
           git clone https://github.com/Silverlan/pragma.git --recurse-submodules
+          
+          cd pragma/third_party_libs/libpng
+          git pull
+          cd ../../../
+          
           cp build_windows_2.ps1 pragma/build_scripts/
           mkdir -p pragma/build_scripts/windows/
           cp Invoke-Environment.ps1 pragma/build_scripts/windows/
