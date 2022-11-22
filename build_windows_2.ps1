@@ -301,7 +301,7 @@ $rootDir=$PWD
 cd $buildDir
 print_hmsg "Additional CMake args: $cmakeArgs"
 
-$cmdCmake="cmake .. -G `"$generator`" ```
+$cmdCmake="cmake `$root` -G `"$generator`" ```
     -DDEPENDENCY_BOOST_INCLUDE=`"$boostRoot/build/_deps/boost-src`" ```
     -DDEPENDENCY_BOOST_LIBRARY_LOCATION=`"$boostRoot/build/lib/Release`" ```
     -DDEPENDENCY_BOOST_CHRONO_LIBRARY=`"$boostRoot/build/lib/Release/boost_chrono.lib`" ```

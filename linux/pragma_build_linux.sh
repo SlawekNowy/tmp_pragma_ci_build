@@ -350,6 +350,9 @@ echo "Downloading SPIRV-Tools..."
 cd $deps
 git clone https://github.com/KhronosGroup/SPIRV-Tools.git
 cd SPIRV-Tools
+# Note: When updating to a newer version, the SPIRV-Headers commit below has to match
+# the one defined in https://github.com/KhronosGroup/SPIRV-Tools/blob/master/DEPS for the
+# timestamp of this commit
 git reset --hard 7826e19
 cd ../../
 echo "Done!"
@@ -360,7 +363,7 @@ cd $deps
 cd SPIRV-Tools/external
 git clone https://github.com/KhronosGroup/SPIRV-Headers
 cd SPIRV-Headers
-git reset --hard 85a1ed2
+git reset --hard 5a121866927a16ab9d49bed4788b532c7fcea766
 cd ../../
 cd ../../
 echo "Done!"
