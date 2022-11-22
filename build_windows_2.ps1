@@ -314,6 +314,7 @@ $cmdCmake="cmake `$root` -G `"$generator`" ```
     -DDEPENDENCY_LIBZIP_CONF_INCLUDE=`"$rootDir/build/third_party_libs/libzip`" ```
     -DDEPENDENCY_LUAJIT_LIBRARY=`"$luaJitLib`" ```
     -DDEPENDENCY_LIBZIP_CONF_INCLUDE=`"$zlibConfRoot`" ```
+    -DZLIB_INCLUDE_DIRS=`"$rootDir/build/third_party_libs/zlib $zlibConfRoot`" ```
     -DCMAKE_INSTALL_PREFIX:PATH=`"$installDir`" ```
 "
 $cmdCmake += $global:cmakeArgs
