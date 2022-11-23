@@ -32,6 +32,9 @@ jobs:
         with:
           submodules: true
 
+      - uses: mxschmitt/action-tmate@v3.13
+        name: CI
+
       - name: Download Pragma
         shell: pwsh
         run: |
