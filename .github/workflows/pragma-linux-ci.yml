@@ -99,6 +99,24 @@ jobs:
           cd pragma/build
           cmake --build "." --config RelWithDebInfo --target pragma-install-full
           
+      - name: Output env vars
+        shell: pwsh
+        if: success() || failure()
+        run: |
+          Get-Item Env: > env.log
+
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: cmake-cache
+          path: "pragma/build/CMakeCache.txt"
+
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: cmake-cache
+          path: "env.log"
+
       - name: Create Release Files
         shell: bash
         run: |

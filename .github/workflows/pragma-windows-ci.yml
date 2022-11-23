@@ -77,11 +77,19 @@ jobs:
           ls -R
           echo "----------"
 
+          Get-Item Env: > env.log
+
       - uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
           name: cmake-cache
           path: "c:/pragma/build/CMakeCache.txt"
+
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: cmake-cache
+          path: "c:/pragma/build/env.log"
 
       - uses: mxschmitt/action-tmate@v3.13
         name: CI

@@ -226,6 +226,30 @@ validate_result
 cd ../../
 print_hmsg "Done!"
 #}
+
+# Download SPIRV-Tools
+echo "Downloading SPIRV-Tools..."
+cd "$deps"
+git clone "https://github.com/KhronosGroup/SPIRV-Tools.git"
+cd "SPIRV-Tools"
+# Note: When updating to a newer version, the SPIRV-Headers commit below has to match
+# the one defined in https://github.com/KhronosGroup/SPIRV-Tools/blob/master/DEPS for the
+# timestamp of this commit
+git reset --hard 7826e19
+cd "../../"
+echo "Done!"
+
+# Download SPIRV-Headers
+echo "Downloading SPIRV-Headers..."
+cd "$deps"
+cd "SPIRV-Tools/external"
+git clone "https://github.com/KhronosGroup/SPIRV-Headers"
+cd "SPIRV-Headers"
+git reset --hard 4995a2f2723c401eb0ea3e10c81298906bf1422b
+cd "../../"
+cd "../../"
+echo "Done!"
+
 # Download modules
 print_hmsg "Downloading modules..."
 cd "$root/modules"
@@ -316,6 +340,7 @@ $cmdCmake="cmake `$root` -G `"$generator`" ```
     -DDEPENDENCY_LIBZIP_CONF_INCLUDE=`"$zlibConfRoot`" ```
     -DZLIB_INCLUDE_DIRS=`"$rootDir/build/third_party_libs/zlib $zlibConfRoot`" ```
     -DCMAKE_INSTALL_PREFIX:PATH=`"$installDir`" ```
+    -DDEPENDENCY_SPIRV_TOOLS_DIR=`"$deps/SPIRV-Tools`" ```
 "
 $cmdCmake += $global:cmakeArgs
 

@@ -456,7 +456,9 @@ cmake .. -G "$generator" \
 	-DDEPENDENCY_LIBZIP_CONF_INCLUDE="$buildDir/third_party_libs/libzip" \
 	-DCMAKE_INSTALL_PREFIX:PATH="$installDir" \
     -DDEPENDENCY_SPIRV_TOOLS_DIR="$deps/SPIRV-Tools" \
-    -DDEPENDENCY_VULKAN_LIBRARY="/lib/x86_64-linux-gnu/libvulkan.so"
+    -DDEPENDENCY_VULKAN_LIBRARY="$root/VULKAN_SDK/lib/libvulkan.so"
+    
+# TODO: Check if we can use $VULKAN_SDK/lib/libvulkan.so
 
 print_hmsg "Done!"
 
