@@ -32,8 +32,8 @@ jobs:
         with:
           submodules: true
 
-      - uses: mxschmitt/action-tmate@v3.13
-        name: CI
+      #- uses: mxschmitt/action-tmate@v3.13
+      #  name: CI
 
       - name: Prepare Vulkan SDK
         uses: humbletim/setup-vulkan-sdk@v1.2.0
