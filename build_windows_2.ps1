@@ -326,6 +326,8 @@ $rootDir=$PWD
 cd $buildDir
 print_hmsg "Additional CMake args: $cmakeArgs"
 
+$testZlibConfDir="C:\pragma\build\third_party_libs\zlib"
+
 $cmdCmake="cmake `$root` -G `"$generator`" ```
     -DDEPENDENCY_BOOST_INCLUDE=`"$boostRoot/build/_deps/boost-src`" ```
     -DDEPENDENCY_BOOST_LIBRARY_LOCATION=`"$boostRoot/build/lib/Release`" ```
@@ -335,9 +337,9 @@ $cmdCmake="cmake `$root` -G `"$generator`" ```
     -DDEPENDENCY_BOOST_SYSTEM_LIBRARY=`"$boostRoot/build/lib/Release/boost_system.lib`" ```
     -DDEPENDENCY_BOOST_THREAD_LIBRARY=`"$boostRoot/build/lib/Release/boost_thread.lib`" ```
     -DDEPENDENCY_GEOMETRIC_TOOLS_INCLUDE=`"$depsDir/GeometricTools/GTE`" ```
-    -DDEPENDENCY_LIBZIP_CONF_INCLUDE=`"$rootDir/build/third_party_libs/libzip`" ```
     -DDEPENDENCY_LUAJIT_LIBRARY=`"$luaJitLib`" ```
-    -DDEPENDENCY_LIBZIP_CONF_INCLUDE=`"$zlibConfRoot`" ```
+    -DDEPENDENCY_LUA_LIBRARY=`"$luaJitLib`" ```
+    -DDEPENDENCY_LIBZIP_CONF_INCLUDE=`"$testZlibConfDir`" ```
     -DZLIB_INCLUDE_DIRS=`"$rootDir/build/third_party_libs/zlib $zlibConfRoot`" ```
     -DCMAKE_INSTALL_PREFIX:PATH=`"$installDir`" ```
     -DDEPENDENCY_SPIRV_TOOLS_DIR=`"$deps/SPIRV-Tools`" ```
