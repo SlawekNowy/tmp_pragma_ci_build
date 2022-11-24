@@ -19,6 +19,7 @@ if(is_multi_config)
 else()
 	set(BINARY_PRAGMA_DIR "" CACHE INTERNAL "" FORCE)
 endif()
+set(BINARY_PRAGMA_DIR "${CMAKE_BINARY_DIR}" CACHE INTERNAL "" FORCE)
 
 function(search_lib_recursive_full VAR_NAME FILE_PATH)
 	if(WIN32)
@@ -222,12 +223,8 @@ if(WIN32)
 	set(ZLIB_LIB_NAME "zlib" CACHE INTERNAL "" FORCE)
 else()
 	set(ZLIB_LIB_NAME "z" CACHE INTERNAL "" FORCE)
-
-
 endif()
 search_lib_recursive(DEPENDENCY_ZLIB_LIBRARY third_party_libs/zlib/${BINARY_PRAGMA_DIR} ${ZLIB_LIB_NAME})
-
-
 
 set(DEPENDENCY_ZLIB_BUILD_INCLUDE ${CMAKE_CURRENT_BINARY_DIR}/third_party_libs/zlib CACHE PATH "Path to include directory.")
 
