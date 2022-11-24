@@ -441,6 +441,13 @@ do
     cp "$root/../pr_chromium_setup_linux.sh" "$root/modules/pr_chromium/build_scripts/setup_linux.sh"
     # TODO TMP FIX
   fi
+  if [ $moduleName -eq "pr_unirender" ]; then
+    # TODO TMP FIX
+    echo "Copying $root/../pr_unirender_setup_linux.sh to $root/modules/pr_unirender/build_scripts/setup_linux.sh"
+    cp "$root/../pr_unirender_setup_linux.sh" "$root/modules/pr_unirender/build_scripts/setup_linux.sh"
+    cp -a "$root/../pr_cycles_build_scripts/." "$root/modules/pr_unirender/build_scripts/"
+    # TODO TMP FIX
+  fi
 
   if [ -f "$moduleDir/build_scripts/setup_linux.sh" ]; then
 		echo "Executing module setup script..."
