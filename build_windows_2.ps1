@@ -269,13 +269,19 @@ if($with_common_modules) {
 
 if($with_pfm) {
     if($with_core_pfm_modules -Or $with_all_pfm_modules) {
-        $modules += "pr_curl:https://github.com/Silverlan/pr_curl.git"
+        # TODO TMP FIX
+        #$modules += "pr_curl:https://github.com/Silverlan/pr_curl.git"
+        $modules += "pr_curl:https://github.com/Silverlan/tmp_pr_curl_ci3.git"
+        # TODO TMP FIX
         $modules += "pr_dmx:https://github.com/Silverlan/pr_dmx.git"
     }
     if($with_all_pfm_modules) {
         $modules += "pr_chromium:https://github.com/Silverlan/pr_chromium.git"
         $modules += "pr_unirender:https://github.com/Silverlan/pr_cycles.git"
-        $modules += "pr_curl:https://github.com/Silverlan/pr_curl.git"
+        # TODO TMP FIX
+        #$modules += "pr_curl:https://github.com/Silverlan/pr_curl.git"
+        $modules += "pr_curl:https://github.com/Silverlan/tmp_pr_curl_ci3.git"
+        # TODO TMP FIX
         $modules += "pr_dmx:https://github.com/Silverlan/pr_dmx.git"
         $modules += "pr_xatlas:https://github.com/Silverlan/pr_xatlas.git"
     }

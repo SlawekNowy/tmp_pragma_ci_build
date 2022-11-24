@@ -264,7 +264,7 @@ if [ ! $isDepsDirAbs -eq 1 ]; then
 fi
 isInstallDirAbs=$(echo is_abs_path $installDir)
 if [ ! $isInstallDirAbs -eq 1 ]; then
-	installDir="$PWD/$installDir"
+	installDir="$buildDir/$installDir"
 fi
 
 mkdir -p "$buildDir"
@@ -388,13 +388,19 @@ fi
 
 if [ $with_pfm -eq 1 ]; then
 	if [ $with_core_pfm_modules -eq 1 ] || [ $with_all_pfm_modules -eq 1 ]; then
-		modules+=( "pr_curl:https://github.com/Silverlan/pr_curl.git" )
+    # TODO TMP FIX
+		#modules+=( "pr_curl:https://github.com/Silverlan/pr_curl.git" )
+		modules+=( "pr_curl:https://github.com/Silverlan/tmp_pr_curl_ci3.git" )
+    # TODO TMP FIX
 		modules+=( "pr_dmx:https://github.com/Silverlan/pr_dmx.git" )
 	fi
 	if [ $with_all_pfm_modules -eq 1 ]; then
 		modules+=( "pr_chromium:https://github.com/Silverlan/pr_chromium.git" )
 		modules+=( "pr_unirender:https://github.com/Silverlan/pr_cycles.git" )
-		modules+=( "pr_curl:https://github.com/Silverlan/pr_curl.git" )
+    # TODO TMP FIX
+		#modules+=( "pr_curl:https://github.com/Silverlan/pr_curl.git" )
+		modules+=( "pr_curl:https://github.com/Silverlan/tmp_pr_curl_ci3.git" )
+    # TODO TMP FIX
 		modules+=( "pr_dmx:https://github.com/Silverlan/pr_dmx.git" )
 		modules+=( "pr_xatlas:https://github.com/Silverlan/pr_xatlas.git" )
 	fi
