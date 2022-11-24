@@ -407,7 +407,9 @@ if [ $with_pfm -eq 1 ]; then
 fi
 
 if [ $with_vr -eq 1 ]; then
-	modules+=( "pr_openvr:https://github.com/Silverlan/pr_openvr.git" )
+  #modules+=( "pr_openvr:https://github.com/Silverlan/pr_openvr.git" )
+  modules+=( "pr_openvr:https://github.com/Silverlan/tmp_pr_openvr_ci2.git" )
+  # TODO TMP FIX
 fi
 
 moduleList=""

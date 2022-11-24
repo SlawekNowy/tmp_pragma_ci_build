@@ -288,7 +288,10 @@ if($with_pfm) {
 }
 
 if($with_vr) {
-    $modules += "pr_openvr:https://github.com/Silverlan/pr_openvr.git"
+    # TODO TMP FIX
+    #$modules += "pr_openvr:https://github.com/Silverlan/pr_openvr.git"
+    $modules += "pr_openvr:https://github.com/Silverlan/tmp_pr_openvr_ci2.git"
+    # TODO TMP FIX
 }
 
 $moduleList=""
