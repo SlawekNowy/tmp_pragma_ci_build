@@ -61,6 +61,7 @@ jobs:
         run: |
           cp CMakeLists.txt pragma/
           cp pr_prosper_vulkan_CMakeLists.txt pragma/modules/pr_prosper_vulkan/CMakeLists.txt
+          cp pr_soloud_CMakeLists.txt pragma/modules/pr_audio_soloud/CMakeLists.txt
           
       - name: Build Pragma
         shell: pwsh
