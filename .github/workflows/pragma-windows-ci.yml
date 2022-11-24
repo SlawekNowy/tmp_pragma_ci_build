@@ -46,6 +46,9 @@ jobs:
         shell: pwsh
         run: |
           git clone https://github.com/Silverlan/pragma.git --recurse-submodules
+
+          # Fix zconf overwrite issues
+          cp zlib_CMakeLists.txt pragma/third_party_libs/zlib/CMakeLists.txt
           
           cd pragma/third_party_libs/libpng
           git checkout libpng16

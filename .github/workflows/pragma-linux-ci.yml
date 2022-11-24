@@ -78,6 +78,9 @@ jobs:
           cp linux/pragma_build_linux.sh pragma/build_scripts/build_linux.sh
           cp pr_prosper_vulkan_CMakeLists.txt pragma/modules/pr_prosper_vulkan/CMakeLists.txt
 
+          # Fix zconf overwrite issues
+          cp zlib_CMakeLists.txt pragma/third_party_libs/zlib/CMakeLists.txt
+
       - name: Preprocessing
         shell: bash
         run: |
