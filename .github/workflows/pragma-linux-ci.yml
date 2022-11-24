@@ -77,7 +77,6 @@ jobs:
           git clone https://github.com/Silverlan/pragma.git --recurse-submodules
           cp linux/pragma_build_linux.sh pragma/build_scripts/build_linux.sh
           cp pr_prosper_vulkan_CMakeLists.txt pragma/modules/pr_prosper_vulkan/CMakeLists.txt
-          cp pr_soloud_CMakeLists.txt pragma/modules/pr_audio_soloud/CMakeLists.txt
 
       - name: Preprocessing
         shell: bash

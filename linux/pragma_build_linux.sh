@@ -435,6 +435,10 @@ do
 	moduleList="$moduleList $moduleName"
 done
 
+# TODO TMP FIX
+cp "$root/../pr_soloud_CMakeLists.txt" "pr_audio_soloud/CMakeLists.txt"
+# TODO TMP FIX
+
 cd ..
 echo "Done!"
 

@@ -316,6 +316,10 @@ foreach ( $module in $modules )
     $moduleList += $moduleName
 }
 
+# TODO TMP FIX
+cp "$root/../pr_soloud_CMakeLists.txt" "pr_audio_soloud/CMakeLists.txt"
+# TODO TMP FIX
+
 cd ..
 print_hmsg "Done!"
 
