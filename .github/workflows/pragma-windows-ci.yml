@@ -95,17 +95,19 @@ jobs:
           name: cmake-cache
           path: "c:/pragma/build/env.log"
 
-      - uses: mxschmitt/action-tmate@v3.13
-        name: CI
-        if: success() || failure()
+      #- uses: mxschmitt/action-tmate@v3.13
+      #  name: CI
+      #  if: success() || failure()
           
       - name: Create Release Files
+        if: success() || failure()
         shell: bash
         run: |
           mkdir release
           rsync pragma/install/ release/
           
       - name: Release Binaries
+        if: success() || failure()
         uses: Silverlan/common_actions/release_nightly_binaries@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

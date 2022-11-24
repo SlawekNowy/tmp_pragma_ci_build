@@ -366,6 +366,15 @@ print_hmsg "Done!"
 
 print_hmsg "Build files have been written to \"$buildDir\"."
 
+# TODO TMP FIX
+$curDir="$PWD"
+cd "$root/third_party_libs/zlib"
+cp "zconf.h" "../libzip/lib/"
+cd "$root/third_party_libs/libzip"
+cp "$buildDir/third_party_libs/libzip/zipconf.h" "$root/external_libs/util_zip/include"
+cd "$curDir"
+# TODO TMP FIX
+
 $curDir=$PWD
 if($with_pfm) {
     print_hmsg "Downloading PFM addon..."
