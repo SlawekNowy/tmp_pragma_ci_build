@@ -435,7 +435,14 @@ do
 		echo "Done!"
 	fi
 
-    if [ -f "$moduleDir/build_scripts/setup_linux.sh" ]; then
+  if [ $moduleName -eq "pr_chromium" ]; then
+    # TODO TMP FIX
+    echo "Copying $root/../pr_chromium_setup_linux.sh to $root/modules/pr_chromium/build_scripts/setup_linux.sh"
+    cp "$root/../pr_chromium_setup_linux.sh" "$root/modules/pr_chromium/build_scripts/setup_linux.sh"
+    # TODO TMP FIX
+  fi
+
+  if [ -f "$moduleDir/build_scripts/setup_linux.sh" ]; then
 		echo "Executing module setup script..."
 		curDir=$PWD
         source "$PWD/$moduleName/build_scripts/setup_linux.sh"
