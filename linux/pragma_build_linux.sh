@@ -380,7 +380,10 @@ fi
 
 if [ $with_common_modules -eq 1 ]; then
 	modules+=( "pr_bullet:\"https://github.com/Silverlan/pr_bullet.git\"" )
-	modules+=( "pr_audio_soloud:\"https://github.com/Silverlan/pr_soloud.git\"" )
+  # TODO TMP FIX
+	modules+=( "pr_audio_soloud:\"https://github.com/Silverlan/tmp_pr_soloud_ci2.git\"" )
+  #modules+=( "pr_audio_soloud:\"https://github.com/Silverlan/pr_soloud.git\"" )
+  # TODO TMP FIX
 fi
 
 if [ $with_pfm -eq 1 ]; then
@@ -434,10 +437,6 @@ do
 
 	moduleList="$moduleList $moduleName"
 done
-
-# TODO TMP FIX
-cp "$root/../pr_soloud_CMakeLists.txt" "pr_audio_soloud/CMakeLists.txt"
-# TODO TMP FIX
 
 cd ..
 echo "Done!"

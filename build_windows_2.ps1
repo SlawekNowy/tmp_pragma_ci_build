@@ -260,7 +260,11 @@ if($with_essential_client_modules) {
 
 if($with_common_modules) {
     $modules += "pr_bullet:`"https://github.com/Silverlan/pr_bullet.git`""
-    $modules += "pr_audio_soloud:`"https://github.com/Silverlan/pr_soloud.git`""
+
+    # TODO TMP FIX
+    $modules += "pr_audio_soloud:`"https://github.com/Silverlan/tmp_pr_soloud_ci2.git`""
+    #$modules += "pr_audio_soloud:`"https://github.com/Silverlan/pr_soloud.git`""
+    # TODO TMP FIX
 }
 
 if($with_pfm) {
@@ -315,10 +319,6 @@ foreach ( $module in $modules )
     $moduleList += " "
     $moduleList += $moduleName
 }
-
-# TODO TMP FIX
-cp "$root/../pr_soloud_CMakeLists.txt" "pr_audio_soloud/CMakeLists.txt"
-# TODO TMP FIX
 
 cd ..
 print_hmsg "Done!"
