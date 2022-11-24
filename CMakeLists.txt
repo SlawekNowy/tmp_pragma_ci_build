@@ -19,7 +19,6 @@ if(is_multi_config)
 else()
 	set(BINARY_PRAGMA_DIR "" CACHE INTERNAL "" FORCE)
 endif()
-set(BINARY_PRAGMA_DIR "${CMAKE_BINARY_DIR}" CACHE INTERNAL "" FORCE)
 
 function(search_lib_recursive_full VAR_NAME FILE_PATH)
 	if(WIN32)
