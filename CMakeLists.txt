@@ -17,7 +17,7 @@ get_property(is_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(is_multi_config)
 	set(BINARY_PRAGMA_DIR ${CONFIG_BUILD_TYPE} CACHE INTERNAL "" FORCE)
 else()
-	set(BINARY_PRAGMA_DIR "" CACHE INTERNAL "" FORCE)
+	set(BINARY_PRAGMA_DIR "." CACHE INTERNAL "" FORCE)
 endif()
 
 function(search_lib_recursive_full VAR_NAME FILE_PATH)
