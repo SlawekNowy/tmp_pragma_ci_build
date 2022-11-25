@@ -40,6 +40,13 @@ cmakeArgs=" $cmakeArgs -DDEPENDENCY_CYCLES_ATOMIC_INCLUDE=\"$deps/cycles\third_p
 cmakeArgs=" $cmakeArgs -DDEPENDENCY_CYCLES_DEPENDENCIES_LOCATION=\"$cyclesDepsRoot\" "
 cmakeArgs=" $cmakeArgs -DDEPENDENCY_CYCLES_LIBRARY_LOCATION=\"$cyclesRoot/build/lib/$buildConfig\" "
 
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_CYCLES_OPENEXR_INCLUDE=\"$deps/lib/linux_centos7_x86_64/openexr/include\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_CYCLES_OPENIMAGEDENOISE_INCLUDE=\"$deps/lib/linux_centos7_x86_64/openimagedenoise/include\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_CYCLES_OPENIMAGEIO_INCLUDE=\"$deps/lib/linux_centos7_x86_64/openimageio/include\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_CYCLES_OSL_INCLUDE=\"$deps/lib/linux_centos7_x86_64/osl/include\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_CYCLES_PUGIXML_INCLUDE=\"$deps/lib/linux_centos7_x86_64/pugixml/include\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_CYCLES_EMBREE_INCLUDE=\"$deps/lib/linux_centos7_x86_64/embree/include\" "
+
 cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENEXR_INCLUDE=\"$cyclesDepsRoot/openexr/include\" "
 #cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENEXR_UTIL_LIBRARY=\"$cyclesDepsRoot/openexr/lib/OpenEXRUtil_s.lib\" "
 cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENEXR_IMATH_INCLUDE=\"$cyclesDepsRoot/imath/include\" "

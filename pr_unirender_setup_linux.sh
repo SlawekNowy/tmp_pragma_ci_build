@@ -35,7 +35,7 @@ if [ ! -d "$oneTBBRoot" ]; then
 	print_hmsg "Done!"
 fi
 
-cmakeArgs=" $cmakeArgs -DDEPENDENCY_TBB_LIBRARY=\"$oneTBBRoot/lib/intel64/vc14/tbb.lib\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_TBB_LIBRARY=\"$oneTBBRoot/lib/intel64/gcc4.7/libtbb.so\" "
 
 # OIDN
 cd "$deps"
@@ -60,7 +60,7 @@ validate_result
 cmake --build "." --config "$buildConfig"
 validate_result
 
-cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENIMAGEDENOISE_INCLUDE=\"$oidnRoot/include\" -DDEPENDENCY_OPENIMAGEDENOISE_LIBRARY=\"$oidnRoot/build/$buildConfig/OpenImageDenoise.lib\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENIMAGEDENOISE_INCLUDE=\"$oidnRoot/include\" -DDEPENDENCY_OPENIMAGEDENOISE_LIBRARY=\"$oidnRoot/build/libOpenImageDenoise.so\" "
 
 # OCIO
 cd "$deps"
@@ -88,7 +88,7 @@ validate_result
 cp $ocioRoot/build/include/OpenColorIO/OpenColorABI.h $ocioRoot/include/OpenColorIO/
 validate_result
 
-cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENCOLORIO_INCLUDE=\"$ocioRoot/include\" -DDEPENDENCY_OPENCOLORIO_LIBRARY=\"$ocioRoot/build/src/OpenColorIO/$buildConfig/OpenColorIO.lib\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENCOLORIO_INCLUDE=\"$ocioRoot/include\" -DDEPENDENCY_OPENCOLORIO_LIBRARY=\"$ocioRoot/build/src/OpenColorIO/libOpenColorIO.so\" "
 
 # OIIO
 source "$SCRIPT_DIR/linux/build_oiio.sh"

@@ -128,7 +128,7 @@ validate_result
 cmake --build "." --config "$buildConfig"
 validate_result
 
-cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENSUBDIV_INCLUDE=\"$subdivRoot\" -DDEPENDENCY_OPENSUBDIV_LIBRARY=\"$subdivRoot/build/lib/$buildConfig/osdGPU.lib\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENSUBDIV_INCLUDE=\"$subdivRoot\" -DDEPENDENCY_OPENSUBDIV_LIBRARY=\"$subdivRoot/build/lib/libosdGPU.a\" "
 
 # util_ocio
 utilOcioRoot="$root/external_libs/util_ocio"

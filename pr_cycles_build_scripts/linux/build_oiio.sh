@@ -23,4 +23,4 @@ print_hmsg "Building openimageio..."
 validate_result
 print_hmsg "Done!"
 
-cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENIMAGEIO_INCLUDE=\"$deps/vcpkg/installed/x64-windows/include\" -DDEPENDENCY_OPENIMAGEIO_LIBRARY=\"$deps/vcpkg/installed/x64-windows/lib/OpenImageIO.lib\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_OPENIMAGEIO_INCLUDE=\"$deps/vcpkg/installed/x64-linux/include\" -DDEPENDENCY_OPENIMAGEIO_LIBRARY=\"$deps/vcpkg/installed/x64-linux/lib/libOpenImageIO.a\" "
