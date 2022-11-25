@@ -532,6 +532,23 @@ if [ $build -eq 1 ]; then
 	echo "Running build command:"
 	echo "$cmakeBuild"
   	eval "$cmakeBuild"
+
+  # TODO TMP FIX
+	cmake --build "." --config "RelWithDebInfo" --target pragma-install
+  cmake --build "." --config "RelWithDebInfo" --target pr_prosper_vulkan
+  cmake --build "." --config "RelWithDebInfo" --target pr_bullet
+  cmake --build "." --config "RelWithDebInfo" --target pr_audio_soloud
+  cmake --build "." --config "RelWithDebInfo" --target pr_curl
+  cmake --build "." --config "RelWithDebInfo" --target pr_dmx
+  cmake --build "." --config "RelWithDebInfo" --target pr_chromium
+  cmake --build "." --config "RelWithDebInfo" --target pr_unirender
+  cmake --build "." --config "RelWithDebInfo" --target pr_xatlas
+  cmake --build "." --config "RelWithDebInfo" --target pr_openvr
+  cmake --build "." --config "RelWithDebInfo" --target pfm
+  cmake --build "." --config "RelWithDebInfo" --target util_raytracing
+  cmake --build "." --config "RelWithDebInfo" --target UniRender_cycles
+  # TODO TMP FIX
+
 	validate_result
 
 	print_hmsg "Build Successful! Pragma has been installed to \"$installDir\"."

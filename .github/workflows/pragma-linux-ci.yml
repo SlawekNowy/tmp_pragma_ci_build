@@ -81,6 +81,9 @@ jobs:
           # Fix zconf overwrite issues
           cp zlib_CMakeLists.txt pragma/third_party_libs/zlib/CMakeLists.txt
 
+          # Fix code issues (yet to be committed)
+          cp engine.cpp pragma/core/shared/src/engine.cpp
+
       - name: Preprocessing
         shell: bash
         run: |
@@ -125,7 +128,7 @@ jobs:
         shell: bash
         run: |
           mkdir release
-          rsync -r pragma/build/install/ release/
+          rsync -r "$PWD/install/" release/
 
       - name: Release Binaries
         uses: Silverlan/common_actions/release_nightly_binaries@main
@@ -134,7 +137,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{ github.ref_name }}
           
-      #- name: Handle Error
-      #  uses: Silverlan/common_actions/action_handle_error@main
-      #  if: failure()
+      - name: Handle Error
+        uses: Silverlan/common_actions/action_handle_error@main
+        if: failure()
         

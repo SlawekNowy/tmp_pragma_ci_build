@@ -50,6 +50,9 @@ jobs:
           # Fix zconf overwrite issues
           cp zlib_CMakeLists.txt pragma/third_party_libs/zlib/CMakeLists.txt
           
+          # Fix code issues (yet to be committed)
+          cp engine.cpp pragma/core/shared/src/engine.cpp
+
           cd pragma/third_party_libs/libpng
           git checkout libpng16
           git pull
@@ -95,16 +98,16 @@ jobs:
           name: cmake-cache
           path: "c:/pragma/build/env.log"
 
-      #- uses: mxschmitt/action-tmate@v3.13
-      #  name: CI
-      #  if: success() || failure()
+      - uses: mxschmitt/action-tmate@v3.13
+        name: CI
+        if: success() || failure()
           
       - name: Create Release Files
         if: success() || failure()
         shell: bash
         run: |
           mkdir release
-          rsync pragma/install/ release/
+          cp -a c:/pragma/build/install/. release/
           
       - name: Release Binaries
         if: success() || failure()
