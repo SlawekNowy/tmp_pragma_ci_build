@@ -396,11 +396,7 @@ if [ $with_pfm == 1 ]; then
 	fi
 	if [ $with_all_pfm_modules == 1 ]; then
 		modules+=( "pr_chromium:https://github.com/Silverlan/pr_chromium.git" )
-
-    # TODO TMP FIX
-		#modules+=( "pr_unirender:https://github.com/Silverlan/pr_cycles.git" )
-    # TODO TMP FIX
-
+		modules+=( "pr_unirender:https://github.com/Silverlan/pr_cycles.git" )
     # TODO TMP FIX
 		#modules+=( "pr_curl:https://github.com/Silverlan/pr_curl.git" )
 		modules+=( "pr_curl:https://github.com/Silverlan/tmp_pr_curl_ci3.git" )
