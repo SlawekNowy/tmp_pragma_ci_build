@@ -204,7 +204,7 @@ for i in "$@"; do
   esac
 done
 
-if [ $displayHelp == 1 ]; then
+if [ $displayHelp -eq 1 ]; then
 	display_help
 	exit 0
 fi
@@ -235,7 +235,7 @@ strindex() {
 
 validate_result() {
     resultCode=$?
-    if [ $resultCode != 0 ]; then
+    if [ ! $resultCode -eq 0 ]; then
         RED='\033[0;31m'
         NC='\033[0m' # No Color
         printf "${RED}Critical failure detected, execution will halt!${NC}\n"
@@ -255,15 +255,15 @@ depsDir="$deps_directory"
 installDir="$install_directory"
 
 isBuildDirAbs=$(echo is_abs_path $buildDir)
-if [ $isBuildDirAbs != 1 ]; then
+if [ ! $isBuildDirAbs -eq 1 ]; then
 	buildDir="$PWD/$buildDir"
 fi
 isDepsDirAbs=$(echo is_abs_path $depsDir)
-if [ $isDepsDirAbs != 1 ]; then
+if [ ! $isDepsDirAbs -eq 1 ]; then
 	depsDir="$PWD/$depsDir"
 fi
 isInstallDirAbs=$(echo is_abs_path $installDir)
-if [ $isInstallDirAbs != 1 ]; then
+if [ ! $isInstallDirAbs -eq 1 ]; then
 	installDir="$buildDir/$installDir"
 fi
 
@@ -374,11 +374,11 @@ cd modules
 
 # TODO: Allow defining custom modules via arguments
 modules=()
-if [ $with_essential_client_modules == 1 ]; then
+if [ $with_essential_client_modules -eq 1 ]; then
     modules+=( "pr_prosper_vulkan:\"https://github.com/Silverlan/pr_prosper_vulkan.git\"" )
 fi
 
-if [ $with_common_modules == 1 ]; then
+if [ $with_common_modules -eq 1 ]; then
 	modules+=( "pr_bullet:\"https://github.com/Silverlan/pr_bullet.git\"" )
   # TODO TMP FIX
 	modules+=( "pr_audio_soloud:\"https://github.com/Silverlan/tmp_pr_soloud_ci2.git\"" )
@@ -386,15 +386,15 @@ if [ $with_common_modules == 1 ]; then
   # TODO TMP FIX
 fi
 
-if [ $with_pfm == 1 ]; then
-	if [ $with_core_pfm_modules == 1 ] || [ $with_all_pfm_modules == 1 ]; then
+if [ $with_pfm -eq 1 ]; then
+	if [ $with_core_pfm_modules -eq 1 ] || [ $with_all_pfm_modules -eq 1 ]; then
     # TODO TMP FIX
 		#modules+=( "pr_curl:https://github.com/Silverlan/pr_curl.git" )
 		modules+=( "pr_curl:https://github.com/Silverlan/tmp_pr_curl_ci3.git" )
     # TODO TMP FIX
 		modules+=( "pr_dmx:https://github.com/Silverlan/pr_dmx.git" )
 	fi
-	if [ $with_all_pfm_modules == 1 ]; then
+	if [ $with_all_pfm_modules -eq 1 ]; then
 		modules+=( "pr_chromium:https://github.com/Silverlan/pr_chromium.git" )
 		modules+=( "pr_unirender:https://github.com/Silverlan/pr_cycles.git" )
     # TODO TMP FIX
@@ -406,7 +406,7 @@ if [ $with_pfm == 1 ]; then
 	fi
 fi
 
-if [ $with_vr == 1 ]; then
+if [ $with_vr -eq 1 ]; then
   #modules+=( "pr_openvr:https://github.com/Silverlan/pr_openvr.git" )
   modules+=( "pr_openvr:https://github.com/Silverlan/tmp_pr_openvr_ci2.git" )
   # TODO TMP FIX
@@ -493,7 +493,7 @@ print_hmsg "Done!"
 print_hmsg "Build files have been written to \"$buildDir\"."
 
 curDir="$PWD"
-if [ $with_pfm == 1 ]; then
+if [ $with_pfm -eq 1 ]; then
 	print_hmsg "Downloading PFM addon..."
   mkdir -p "$installDir/addons"
 	cd "$installDir/addons"
@@ -508,7 +508,7 @@ if [ $with_pfm == 1 ]; then
 	print_hmsg "Done!"
 fi
 
-if [ $with_vr == 1 ]; then
+if [ $with_vr -eq 1 ]; then
 	print_hmsg "Downloading VR addon..."
   mkdir -p "$installDir/addons"
 	cd "$installDir/addons"
@@ -524,10 +524,10 @@ if [ $with_vr == 1 ]; then
 fi
 cd $curDir
 
-if [ $build == 1 ]; then
+if [ $build -eq 1 ]; then
 	print_hmsg "Building Pragma..."
 	targets="pragma-install-full $moduleList"
-	if [ $with_pfm == 1 ]; then
+	if [ $with_pfm -eq 1 ]; then
 	  targets="$targets pfm"
 	fi
 	targets="$targets pragma-install"
