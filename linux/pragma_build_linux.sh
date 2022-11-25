@@ -469,19 +469,23 @@ rootDir=$PWD
 cd $buildDir
 echo "Additional CMake args: $cmakeArgs"
 
-cmake .. -G "$generator" \
-	-DDEPENDENCY_BOOST_INCLUDE="$deps/boost_1_78_0" \
-	-DDEPENDENCY_BOOST_LIBRARY_LOCATION="$deps/boost_1_78_0/stage/lib" \
-	-DDEPENDENCY_BOOST_CHRONO_LIBRARY="$deps/boost_1_78_0/stage/lib/boost_chrono.a" \
-	-DDEPENDENCY_BOOST_DATE_TIME_LIBRARY="$deps/boost_1_78_0/stage/lib/boost_date_time.a" \
-	-DDEPENDENCY_BOOST_REGEX_LIBRARY="$deps/boost_1_78_0/stage/lib/boost_regex.a" \
-	-DDEPENDENCY_BOOST_SYSTEM_LIBRARY="$deps/boost_1_78_0/stage/lib/boost_system.a" \
-	-DDEPENDENCY_BOOST_THREAD_LIBRARY="$deps/boost_1_78_0/stage/lib/boost_thread.a" \
-	-DDEPENDENCY_GEOMETRIC_TOOLS_INCLUDE="$deps/GeometricTools/GTE" \
-	-DDEPENDENCY_LIBZIP_CONF_INCLUDE="$buildDir/third_party_libs/libzip" \
-	-DCMAKE_INSTALL_PREFIX:PATH="$installDir" \
-  -DDEPENDENCY_SPIRV_TOOLS_DIR="$deps/SPIRV-Tools" \
-  -DDEPENDENCY_VULKAN_LIBRARY="$VULKAN_SDK/lib/libvulkan.so"
+cmakeConfigure="cmake .. -G \"$generator\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_BOOST_INCLUDE=\"$deps/boost_1_78_0\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_BOOST_LIBRARY_LOCATION=\"$deps/boost_1_78_0/stage/lib\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_BOOST_CHRONO_LIBRARY=\"$deps/boost_1_78_0/stage/lib/boost_chrono.a\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_BOOST_DATE_TIME_LIBRARY=\"$deps/boost_1_78_0/stage/lib/boost_date_time.a\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_BOOST_REGEX_LIBRARY=\"$deps/boost_1_78_0/stage/lib/boost_regex.a\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_BOOST_SYSTEM_LIBRARY=\"$deps/boost_1_78_0/stage/lib/boost_system.a\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_BOOST_THREAD_LIBRARY=\"$deps/boost_1_78_0/stage/lib/boost_thread.a\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_GEOMETRIC_TOOLS_INCLUDE=\"$deps/GeometricTools/GTE\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_LIBZIP_CONF_INCLUDE=\"$buildDir/third_party_libs/libzip\" "
+cmakeConfigure="$cmakeConfigure -DCMAKE_INSTALL_PREFIX:PATH=\"$installDir\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_SPIRV_TOOLS_DIR=\"$deps/SPIRV-Tools\" "
+cmakeConfigure="$cmakeConfigure -DDEPENDENCY_VULKAN_LIBRARY=\"$VULKAN_SDK/lib/libvulkan.so\" "
+cmakeConfigure="$cmakeConfigure $cmakeArgs "
+echo "Running configure command:"
+echo "$cmakeConfigure"
+eval "$cmakeConfigure"
 
 print_hmsg "Done!"
 

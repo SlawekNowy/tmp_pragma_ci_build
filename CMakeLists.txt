@@ -308,6 +308,7 @@ else()
 	search_lib_recursive(DEPENDENCY_LUABIND_BINARY lib/${BINARY_PRAGMA_DIR} luabind)
 endif()
 
+set(DEPENDENCY_LUAJIT_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/third_party_libs/luajit/src CACHE PATH "Path to include directory.")
 set(DEPENDENCY_LUA_INCLUDE ${DEPENDENCY_LUAJIT_INCLUDE} CACHE STRING "" FORCE)
 
 # Third-party libraries
@@ -369,7 +370,6 @@ set(DEPENDENCY_VTFLIB_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/third_party_libs/vtflib/
 set(DEPENDENCY_VTFLIB_BUILD_INCLUDE ${CMAKE_CURRENT_BINARY_DIR}/third_party_libs/vtflib/src CACHE PATH "Path to include directory.")
 search_lib_recursive(DEPENDENCY_VTFLIB_LIBRARY third_party_libs/vtflib/src/${BINARY_PRAGMA_DIR} VTFLib13)
 
-set(DEPENDENCY_LUAJIT_INCLUDE ${CMAKE_CURRENT_LIST_DIR}/third_party_libs/luajit/src CACHE PATH "Path to include directory.")
 if(WIN32)
 	if("${DEPENDENCY_LUAJIT_LIBRARY}" STREQUAL "")
     	search_lib_recursive(DEPENDENCY_LUAJIT_LIBRARY third_party_libs/luajit/src luajit STATIC ${CMAKE_CURRENT_LIST_DIR})
