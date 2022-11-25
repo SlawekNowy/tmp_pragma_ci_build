@@ -23,5 +23,5 @@ cmake .. -G "$generator"
 cmake --build "." --config Release --target libcef_dll_wrapper
 echo "Done!"
 
-cmakeArgs=" $cmakeArgs -DDEPENDENCY_CHROMIUM_INCLUDE=`"$cefRoot`" -DDEPENDENCY_CHROMIUM_LIBRARY=`"$cefRoot/Release/libcef.so`" "
-cmakeArgs=" $cmakeArgs -DDEPENDENCY_LIBCEF_DLL_WRAPPER_LIBRARY=`"$cefRoot/build/libcef_dll_wrapper/libcef_dll_wrapper.a`" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_CHROMIUM_INCLUDE=\"$cefRoot\" -DDEPENDENCY_CHROMIUM_LIBRARY=\"$cefRoot/Release/libcef.so\" "
+cmakeArgs=" $cmakeArgs -DDEPENDENCY_LIBCEF_DLL_WRAPPER_LIBRARY=\"$cefRoot/build/libcef_dll_wrapper/libcef_dll_wrapper.a\" "
