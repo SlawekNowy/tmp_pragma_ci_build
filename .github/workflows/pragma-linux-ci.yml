@@ -128,7 +128,7 @@ jobs:
         shell: bash
         run: |
           mkdir release
-          rsync -r "$PWD/install/" release/
+          rsync -r "$PWD/build/install/" release/
 
       - name: Release Binaries
         uses: Silverlan/common_actions/release_nightly_binaries@main
